@@ -83,3 +83,12 @@ Pendente:
 - parâmetros.
 
 Antes de recomendar qualquer uma dessas escolhas, consultar `docs/feasibility_strategy.md` e `docs/decision_log.md`.
+
+
+## Componentes implementados
+
+- `evaluator.py`: calcula todos os objetivos, qualidades e violações;
+- `objectives.py`: seleciona f1, f2 ou f3 sem recalcular a solução;
+- `algorithms/constructive.py`: contém a heurística construtiva baseline atual.
+
+A heurística construtiva está implementada, mas ainda deve ser tratada como baseline experimental até que sua adequação seja avaliada.

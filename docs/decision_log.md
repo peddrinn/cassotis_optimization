@@ -132,3 +132,26 @@ O protocolo final deve permitir comparação justa entre objetivos e configuraç
 **Decisão:** separar fase de calibração de parâmetros da fase de resultados finais e registrar seeds/configurações das execuções finais.
 
 **Motivação:** evitar seleção oportunista de configurações após observar os resultados e permitir reprodução do relatório.
+---
+
+## D012 — Separação entre avaliação e objetivo ativo
+
+**Status:** CONSOLIDADA
+
+**Decisão:** a função `evaluate()` calcula simultaneamente \(f_1\), \(f_2\), \(f_3\), qualidade e violações. A função `objective_value()` apenas seleciona qual objetivo será minimizado em uma execução mono-objetivo.
+
+**Motivação:** evitar duplicação de cálculos e desacoplar a definição do problema da metaheurística.
+
+**Impacto:** o mesmo algoritmo poderá ser reutilizado para otimizar \(f_1\), \(f_2\) ou \(f_3\), e a mesma avaliação poderá ser reaproveitada nas etapas multiobjetivo.
+
+---
+
+## D013 — Heurística construtiva baseline
+
+**Status:** EXPERIMENTAL
+
+**Decisão:** a solução inicial é construída em duas fases. Primeiro, são atendidas as disponibilidades mínimas globais dos minérios, distribuindo esses caminhões apenas em pilhas elegíveis. Depois, os slots restantes são preenchidos com os minérios elegíveis de menor custo que ainda possuam disponibilidade máxima restante.
+
+**Motivação:** seguir a lógica sugerida no enunciado e garantir, já na construção, massa correta, elegibilidade e limites globais de disponibilidade.
+
+**Impacto:** a solução inicial pode continuar inviável quanto aos limites de SiO₂ e Al₂O₃. A política de tratamento dessas inviabilidades permanece pendente em D007.

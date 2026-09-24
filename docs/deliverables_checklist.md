@@ -3,19 +3,19 @@
 ## Entrega 1 — mono-objetivo
 
 ### Formulação
-- [ ] parâmetros
-- [ ] variáveis
-- [ ] \(f_1\): custo
-- [ ] \(f_2\): desvio quadrático de SiO2
-- [ ] \(f_3\): desvio quadrático de Al2O3
-- [ ] restrição de massa
-- [ ] limites de qualidade
-- [ ] elegibilidade
-- [ ] disponibilidade global
+- [x] parâmetros
+- [x] variáveis
+- [x] \(f_1\): custo
+- [x] \(f_2\): desvio quadrático de SiO2
+- [x] \(f_3\): desvio quadrático de Al2O3
+- [x] restrição de massa
+- [x] limites de qualidade
+- [x] elegibilidade
+- [x] disponibilidade global
 
 ### Algoritmo
-- [ ] representação da solução
-- [ ] heurística construtiva
+- [x] representação da solução
+- [x] heurística construtiva - baseline implementada
 - [ ] VNS ou GVNS
 - [ ] N1
 - [ ] N2
