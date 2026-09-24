@@ -1,0 +1,3 @@
+group_id,fet_min,fet_target,fet_max,sio2_min,sio2_target,sio2_max,al2o3_min,al2o3_target,al2o3_max
+Sinter1,0,,100,5.0,5.55,6.2,1.0,1.25,2.3
+Sinter2,0,,100,5.0,5.50,6.5,1.0,1.50,2.2
