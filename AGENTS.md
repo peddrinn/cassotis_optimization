@@ -71,16 +71,19 @@ Consolidadas:
 - elegibilidade: deve ser preservada pelos operadores sempre que aplicável;
 - FeT: calculado/armazenado, mas restrição não ativa na instância de exemplo.
 
+Consolidadas na Entrega 1 (ver D007–D017; revisar com o grupo):
+
+- N3: realocação com substituição em cadeia;
+- inviabilidade: regra de viabilidade;
+- GVNS com VND N1 → N2 → N3, primeira melhoria;
+- perturbação: k × 3 movimentos aleatórios, k_max = 3;
+- aceitação: melhoria estrita;
+- parada: 200.000 avaliações.
+
 Pendente:
 
-- política final de inviabilidade;
-- N3;
-- VNS ou GVNS;
-- busca local;
-- perturbação;
-- aceitação;
-- parada;
-- parâmetros.
+- parâmetros e protocolo da Entrega 2 (pesos, valores de ε, normalização);
+- métodos multicritério e atributo adicional da Entrega 3.
 
 Antes de recomendar qualquer uma dessas escolhas, consultar `docs/feasibility_strategy.md` e `docs/decision_log.md`.
 
@@ -89,6 +92,10 @@ Antes de recomendar qualquer uma dessas escolhas, consultar `docs/feasibility_st
 
 - `evaluator.py`: calcula todos os objetivos, qualidades e violações;
 - `objectives.py`: seleciona f1, f2 ou f3 sem recalcular a solução;
-- `algorithms/constructive.py`: contém a heurística construtiva baseline atual.
+- `algorithms/constructive.py`: contém a heurística construtiva baseline atual;
+- `algorithms/vizinhancas.py`: N1, N2 e N3 (enumeração completa, amostragem e aplicação de movimentos);
+- `algorithms/gvns.py`: GVNS com VND e contagem de avaliações;
+- `feasibility.py`: violação normalizada e regra de viabilidade;
+- `visualization.py`: figuras de convergência e de solução.
 
 A heurística construtiva está implementada, mas ainda deve ser tratada como baseline experimental até que sua adequação seja avaliada.
