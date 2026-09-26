@@ -161,7 +161,7 @@ A_p - T_{g(p)}^{Al}
 
 O enunciado define a soma por pilha; portanto, nesta formulação inicial, cada pilha contribui uma vez para o objetivo, sem ponderação adicional por massa.
 
-## 7. Representação computacional proposta
+## 7. Representação computacional adotada
 
 Cada pilha é representada por um vetor cujo comprimento é \(n_p\). Cada posição representa um caminhão e contém o identificador do minério correspondente.
 
@@ -185,3 +185,9 @@ A matriz de contagens \(x_{ip}\) é derivada dessa representação para avaliaç
 - qualidade e disponibilidade ainda podem ser violadas e exigem política específica.
 
 A política final de tratamento dessas inviabilidades está deliberadamente pendente.
+
+## 9. Heurística construtiva baseline
+
+A implementação inicial constrói uma solução que satisfaz por construção a massa das pilhas, a elegibilidade dos minérios e os limites mínimo e máximo globais de disponibilidade. Inicialmente são alocados os usos mínimos obrigatórios de cada minério. Em seguida, os slots restantes são preenchidos iterativamente com os minérios elegíveis de menor custo que ainda possuam disponibilidade.
+
+Os limites de SiO₂ e Al₂O₃ não são considerados pela heurística construtiva baseline; portanto, a solução inicial pode ser inviável quanto à qualidade.
