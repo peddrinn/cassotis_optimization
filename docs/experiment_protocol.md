@@ -39,14 +39,16 @@ Calibração de parâmetros deve ser separada do conjunto de execuções finais.
 
 ## Decisões da Entrega 1
 
-- orçamento: 200.000 avaliações por execução, sem critério auxiliar (D010);
-- sementes finais: 1–5; calibração com 1001–1003 (D017);
-- parâmetros da GVNS: D014–D016;
+- critério de parada: número de avaliações, sem critério auxiliar (D010); valor padrão 200.000, ainda experimental;
 - política de inviabilidade: regra de viabilidade (D007);
+- parâmetros da GVNS: D014–D016; tamanho da amostra e tamanhos de P1/P2/P3 ainda experimentais;
 - curva de convergência: registrada a cada melhoria da melhor solução encontrada;
-- calibração: comparação de 4 variantes com 3 sementes e 100 mil avaliações (tabela em D014).
+- seeds: calibração e resultados finais com conjuntos disjuntos; as 5 seeds finais serão registradas em D017 depois de congelar a configuração e antes da rodada oficial;
+- resultados finais: em commit/PR separado da implementação.
 
-Execução: `python scripts/run_mono_experiments.py`.
+Ordem prevista: calibrar → congelar → registrar seeds → executar → commit de resultados.
+
+Execução: `python scripts/run_mono_experiments.py --seeds S1 S2 S3 S4 S5`.
 
 ## Convenção para curvas
 

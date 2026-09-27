@@ -3,11 +3,11 @@ GVNS for the mono-objective versions of the problem (Entrega 1).
 
 Structure (Aula 02, slides 36-38):
 
-    X <- local search(construct_initial_solution())
+    X <- VND(construct_initial_solution())
     while budget not exhausted:
         k <- 1
-        while k <= k_max:
-            X'  <- SHAKE(X, P_k)             # k * shake_moves_per_k random moves
+        while k <= 3:
+            X'  <- SHAKE(X, P_k)             # P1 small, P2 chain, P3 permutation
             X'' <- VND(X', N1, N2, N3)       # first improvement in each N_l
             if X'' better than X: X <- X''; k <- 1
             else: k <- k + 1
@@ -24,11 +24,16 @@ import time
 from dataclasses import asdict, dataclass, field
 
 from cassotis_optimization.algorithms.constructive import construct_initial_solution
+from cassotis_optimization.algorithms.perturbacoes import (
+    p1_random_replacements,
+    p2_ejection_chain,
+    p3_group_permutation,
+)
 from cassotis_optimization.algorithms.vizinhancas import (
     ENUMERATORS,
-    SAMPLERS,
     Move,
     apply_move,
+    sample_moves,
 )
 from cassotis_optimization.domain import ProblemInstance
 from cassotis_optimization.evaluator import Evaluation, evaluate
@@ -41,14 +46,23 @@ from cassotis_optimization.solution import Solution
 class GVNSConfig:
     objective: ObjectiveName
     seed: int = 0
+    # Stopping criterion: number of evaluations (D010). The value is a
+    # configurable default, not an experimentally fixed choice.
     max_evaluations: int = 200_000
-    k_max: int = 3
-    shake_moves_per_k: int = 3
     neighborhood_order: tuple[str, ...] = ("N1", "N2", "N3")
     # Neighborhoods explored exhaustively (in random order) by the local search.
-    # The others are explored through ``sample_size`` random moves per pass (D014).
+    # The others are explored through ``sample_size`` distinct moves drawn
+    # uniformly without replacement per pass (D014). Experimental value.
     exhaustive_neighborhoods: tuple[str, ...] = ("N1",)
     sample_size: int = 500
+    # Shake structures P1, P2, P3 in increasing strength (D015). Experimental values.
+    p1_positions: int = 2
+    p2_chain_length: int = 3
+    p3_piles: int = 5
+
+    @property
+    def k_max(self) -> int:
+        return 3
 
 
 @dataclass(frozen=True)
@@ -175,20 +189,28 @@ class GVNS:
             instance, config.objective, config.max_evaluations
         )
         self.stats = {f"improvements_{name}": 0 for name in config.neighborhood_order}
+        self.stats.update({f"shake_P{k}": 0 for k in range(1, config.k_max + 1)})
 
     # ------------------------------------------------------------------
     # Shake
     # ------------------------------------------------------------------
 
     def shake(self, solution: Solution, k: int) -> Solution:
-        """P_k: apply k * shake_moves_per_k random moves drawn from N1/N2/N3."""
+        """P_k, with its own structures, separate from the VND neighborhoods."""
 
-        for _ in range(k * self.config.shake_moves_per_k):
-            name = self.rng.choice(self.config.neighborhood_order)
-            move = SAMPLERS[name](solution, self.instance, self.rng)
-            if move is not None:
-                solution = apply_move(solution, move)
-        return solution
+        self.stats[f"shake_P{k}"] += 1
+        config = self.config
+        if k == 1:
+            return p1_random_replacements(
+                solution, self.instance, self.rng, config.p1_positions
+            )
+        if k == 2:
+            return p2_ejection_chain(
+                solution, self.instance, self.rng, config.p2_chain_length
+            )
+        if k == 3:
+            return p3_group_permutation(solution, self.instance, self.rng, config.p3_piles)
+        raise ValueError(f"Unknown perturbation P{k}")
 
     # ------------------------------------------------------------------
     # Local search and VND
@@ -200,16 +222,17 @@ class GVNS:
             self.rng.shuffle(moves)
             return moves
 
-        sampler = SAMPLERS[name]
-        moves = []
-        for _ in range(self.config.sample_size):
-            move = sampler(solution, self.instance, self.rng)
-            if move is not None:
-                moves.append(move)
-        return moves
+        return sample_moves(
+            name, solution, self.instance, self.rng, self.config.sample_size
+        )
 
     def local_search(self, current: Candidate, name: str) -> Candidate:
-        """First improvement in N_name, repeated until no improving move is found."""
+        """
+        First improvement in N_name, repeated until a pass finds no improving move.
+
+        For an exhaustive neighborhood the result is a local optimum of N_name.
+        For a sampled one it only means that no move of the last sample improved.
+        """
 
         improved = True
         while improved:

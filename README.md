@@ -6,7 +6,7 @@ O objetivo é desenvolver, documentar e avaliar uma solução baseada em VNS/GVN
 
 ## Estado atual
 
-Entrega 1 (mono-objetivo) implementada: formulação, representação, heurística construtiva, vizinhanças N1/N2/N3, tratamento de inviabilidade e GVNS completa, com script de experimentos.
+Entrega 1 (mono-objetivo): formulação, representação, heurística construtiva, vizinhanças N1/N2/N3, perturbações P1/P2/P3, tratamento de inviabilidade, GVNS e script de experimentos implementados. Os resultados finais ainda não foram gerados: faltam calibrar os parâmetros experimentais, congelar a configuração e escolher as seeds finais (D017).
 
 Consolidados:
 
@@ -16,14 +16,19 @@ Consolidados:
 - elegibilidade preservada pelos operadores de vizinhança;
 - FeT mantido no domínio, mas não ativo como restrição na instância de exemplo;
 - N3: realocação com substituição em cadeia (D008);
+- heurística construtiva sugerida no enunciado (D013);
 - tratamento de inviabilidade: regra de viabilidade (D007);
-- GVNS com VND N1 → N2 → N3 (D009, D014);
-- perturbação, aceitação e parada (D015, D016, D010);
-- parâmetros e sementes (D014, D017).
+- GVNS com VND N1 → N2 → N3, primeira melhoria (D009, D014);
+- SHAKE com estruturas próprias P1, P2, P3 (D015);
+- aceitação por melhoria estrita (D016);
+- parada por número de avaliações (D010);
+- separação entre seeds de calibração e seeds finais (D017).
+
+Ainda experimentais: orçamento (200 mil avaliações), tamanho da amostra de N2/N3 (500), tamanhos de P1/P2/P3 e as seeds finais.
 
 As decisões da GVNS estão explicadas em linguagem direta em [`docs/gvns_decisoes.md`](docs/gvns_decisoes.md). O registro formal está em [`docs/decision_log.md`](docs/decision_log.md).
 
-Pendentes: Entrega 2 (multiobjetivo), Entrega 3 (decisão multicritério e Streamlit), relatório e apresentações.
+Pendentes: resultados finais da Entrega 1, Entrega 2 (multiobjetivo), Entrega 3 (decisão multicritério e Streamlit), relatório e apresentações.
 
 ## Fonte do problema
 
@@ -52,7 +57,8 @@ Há também uma clarificação da professora sobre disponibilidade: os limites m
 │   ├── visualization.py          # figuras (convergência, solução)
 │   └── algorithms/
 │       ├── constructive.py       # heurística construtiva
-│       ├── vizinhancas.py        # N1, N2, N3 (enumeração e amostragem)
+│       ├── vizinhancas.py        # N1, N2, N3 (enumeração e amostragem uniforme)
+│       ├── perturbacoes.py       # P1, P2, P3 (SHAKE)
 │       └── gvns.py               # GVNS + VND
 ├── scripts/
 │   ├── validate_instance.py
@@ -92,13 +98,26 @@ python scripts/validate_instance.py
 pytest
 ```
 
-## Reproduzir os resultados da Entrega 1
+## Experimentos da Entrega 1
 
 ```bash
-python scripts/run_mono_experiments.py
+python scripts/run_mono_experiments.py --seeds S1 S2 S3 S4 S5
 ```
 
-Gera em `results/mono/` o JSON de cada execução, `summary.csv`, `summary.md` (mín/std/máx), as curvas de convergência e a figura da melhor solução de cada objetivo. Parâmetros: `--budget`, `--seeds`, `--objectives`, `--out`.
+As seeds são obrigatórias. As seeds finais serão registradas em D017 antes da rodada oficial. Para um teste rápido:
+
+```bash
+python scripts/run_mono_experiments.py --seeds 1 2 --budget 5000 --out results/teste
+```
+
+O script gera, na pasta de saída (padrão `results/mono/`):
+
+- o JSON de cada execução;
+- `summary.csv` e `summary.md` (mín/std/máx);
+- as curvas de convergência;
+- a figura da melhor solução de cada objetivo.
+
+Parâmetros: `--seeds`, `--budget`, `--objectives`, `--out`.
 
 ## Regra de desenvolvimento
 

@@ -8,12 +8,12 @@ import matplotlib
 
 matplotlib.use("Agg")
 
-import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.figure import Figure  # noqa: E402
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 
-from .domain import TRUCK_CAPACITY_KT, ProblemInstance  # noqa: E402
-from .evaluator import evaluate  # noqa: E402
-from .solution import Solution  # noqa: E402
+from .domain import TRUCK_CAPACITY_KT, ProblemInstance
+from .evaluator import evaluate
+from .solution import Solution
 
 OBJECTIVE_LABELS = {
     "f1": "f1 — custo total (R$)",

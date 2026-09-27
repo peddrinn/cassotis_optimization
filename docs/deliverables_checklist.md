@@ -20,7 +20,7 @@
 - [x] N1
 - [x] N2
 - [x] N3 definida, justificada e implementada
-- [x] perturbação (D015)
+- [x] perturbação P1/P2/P3 (D015)
 - [x] busca local (D014)
 - [x] tratamento de inviabilidade (D007)
 - [x] aceitação (D016)
@@ -28,12 +28,15 @@
 - [x] pseudocódigo completo (`docs/gvns_decisoes.md`; falta passar para o relatório)
 
 ### Experimentos
-- [x] 5 execuções de \(f_1\)
-- [x] 5 execuções de \(f_2\)
-- [x] 5 execuções de \(f_3\)
-- [x] min/std/max (`results/mono/summary.md`)
-- [x] curvas de convergência
-- [x] visualização das melhores soluções
+- [x] script de experimentos (`scripts/run_mono_experiments.py`)
+- [ ] calibração dos parâmetros experimentais (orçamento, amostra, P1/P2/P3)
+- [ ] congelar configuração e registrar as 5 seeds finais (D017)
+- [ ] 5 execuções de \(f_1\)
+- [ ] 5 execuções de \(f_2\)
+- [ ] 5 execuções de \(f_3\)
+- [ ] min/std/max
+- [ ] curvas de convergência
+- [ ] visualização das melhores soluções
 
 ### Entregáveis
 - [ ] relatório (formulação, algoritmo, pseudocódigo, experimentos, análise)

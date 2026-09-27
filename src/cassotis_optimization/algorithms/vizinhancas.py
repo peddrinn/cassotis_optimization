@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import random
+from bisect import bisect_right
 from collections.abc import Callable
+from itertools import accumulate
 
 from cassotis_optimization.domain import ProblemInstance
 from cassotis_optimization.solution import Solution
-
 
 # A move is a tuple of slot substitutions (pile_id, mineral_out, mineral_in).
 #
@@ -108,7 +109,7 @@ def n3_moves(solution: Solution, instance: ProblemInstance) -> list[Move]:
 
     with m_x, m_y and m_z distinct. The neighborhood is large (order of 10^5
     moves on the example instance), so the local search samples it instead of
-    enumerating it (see ``sample_n3_move`` and D014).
+    enumerating it (see ``sample_moves`` and D014).
     """
 
     moves: list[Move] = []
@@ -143,104 +144,118 @@ def n3_moves(solution: Solution, instance: ProblemInstance) -> list[Move]:
 
 
 # ---------------------------------------------------------------------------
-# Random sampling (used by the shake and by the sampled local search in N3)
+# Uniform sampling without replacement (used by the sampled local search)
 # ---------------------------------------------------------------------------
 
-_MAX_SAMPLING_ATTEMPTS = 200
+
+def _n3_prefixes(
+    solution: Solution,
+    instance: ProblemInstance,
+) -> tuple[list[tuple[str, str, str, str, list[str]]], list[int]]:
+    """
+    Group the N3 moves by prefix (pile_a, pile_b, m_x, m_y).
+
+    Each prefix carries the list of valid m_z; its weight is the length of that
+    list. Drawing a prefix proportionally to its weight and then m_z uniformly
+    gives every distinct N3 move the same probability, without enumerating the
+    whole neighborhood.
+    """
+
+    prefixes: list[tuple[str, str, str, str, list[str]]] = []
+    weights: list[int] = []
+
+    for pile_a_id, pile_a in instance.piles.items():
+        eligible_a = _eligible_minerals(instance, pile_a.group_id)
+
+        for pile_b_id, pile_b in instance.piles.items():
+            if pile_a_id == pile_b_id:
+                continue
+
+            for mineral_x in _distinct_minerals(solution, pile_a_id):
+                if not instance.minerals[mineral_x].is_eligible(pile_b.group_id):
+                    continue
+
+                for mineral_y in _distinct_minerals(solution, pile_b_id):
+                    if mineral_y == mineral_x:
+                        continue
+
+                    candidates_z = [
+                        m for m in eligible_a if m not in (mineral_x, mineral_y)
+                    ]
+                    if candidates_z:
+                        prefixes.append(
+                            (pile_a_id, pile_b_id, mineral_x, mineral_y, candidates_z)
+                        )
+                        weights.append(len(candidates_z))
+
+    return prefixes, weights
 
 
-def sample_n1_move(
+def _sample_n3_moves(
+    solution: Solution,
+    instance: ProblemInstance,
+    rng: random.Random,
+    k: int,
+) -> list[Move]:
+    prefixes, weights = _n3_prefixes(solution, instance)
+    total = sum(weights)
+
+    if k >= total:
+        moves = n3_moves(solution, instance)
+        rng.shuffle(moves)
+        return moves
+
+    cumulative = list(accumulate(weights))
+    chosen: dict[Move, None] = {}
+
+    while len(chosen) < k:
+        index = bisect_right(cumulative, rng.randrange(total))
+        pile_a_id, pile_b_id, mineral_x, mineral_y, candidates_z = prefixes[index]
+        move = (
+            (pile_a_id, mineral_x, rng.choice(candidates_z)),
+            (pile_b_id, mineral_y, mineral_x),
+        )
+        chosen.setdefault(move)
+
+    return list(chosen)
+
+
+def sample_moves(
+    name: str,
+    solution: Solution,
+    instance: ProblemInstance,
+    rng: random.Random,
+    k: int,
+) -> list[Move]:
+    """
+    Up to ``k`` distinct moves of N_name(solution), drawn uniformly without
+    replacement over the distinct moves (D014). If ``k`` is at least the size of
+    the neighborhood, the whole neighborhood is returned in random order.
+    """
+
+    if name == "N3":
+        return _sample_n3_moves(solution, instance, rng, k)
+
+    moves = ENUMERATORS[name](solution, instance)
+    if k >= len(moves):
+        rng.shuffle(moves)
+        return moves
+    return rng.sample(moves, k)
+
+
+def sample_move(
+    name: str,
     solution: Solution,
     instance: ProblemInstance,
     rng: random.Random,
 ) -> Move | None:
-    pile_ids = list(instance.piles)
+    """One move of N_name(solution), uniformly over the distinct moves."""
 
-    for _ in range(_MAX_SAMPLING_ATTEMPTS):
-        pile_id = rng.choice(pile_ids)
-        group_id = instance.piles[pile_id].group_id
-        mineral_out = rng.choice(solution.composition[pile_id])
-        candidates = [
-            m for m in _eligible_minerals(instance, group_id) if m != mineral_out
-        ]
-        if candidates:
-            return ((pile_id, mineral_out, rng.choice(candidates)),)
-
-    return None
+    moves = sample_moves(name, solution, instance, rng, 1)
+    return moves[0] if moves else None
 
 
-def sample_n2_move(
-    solution: Solution,
-    instance: ProblemInstance,
-    rng: random.Random,
-) -> Move | None:
-    pile_ids = list(instance.piles)
-
-    for _ in range(_MAX_SAMPLING_ATTEMPTS):
-        # Same pile order as n2_moves, so a swap has a single representation.
-        index_a, index_b = sorted(rng.sample(range(len(pile_ids)), 2))
-        pile_a_id, pile_b_id = pile_ids[index_a], pile_ids[index_b]
-        group_a = instance.piles[pile_a_id].group_id
-        group_b = instance.piles[pile_b_id].group_id
-
-        mineral_a = rng.choice(solution.composition[pile_a_id])
-        mineral_b = rng.choice(solution.composition[pile_b_id])
-
-        if (
-            mineral_a != mineral_b
-            and instance.minerals[mineral_a].is_eligible(group_b)
-            and instance.minerals[mineral_b].is_eligible(group_a)
-        ):
-            return (
-                (pile_a_id, mineral_a, mineral_b),
-                (pile_b_id, mineral_b, mineral_a),
-            )
-
-    return None
-
-
-def sample_n3_move(
-    solution: Solution,
-    instance: ProblemInstance,
-    rng: random.Random,
-) -> Move | None:
-    pile_ids = list(instance.piles)
-
-    for _ in range(_MAX_SAMPLING_ATTEMPTS):
-        pile_a_id, pile_b_id = rng.sample(pile_ids, 2)
-        group_a = instance.piles[pile_a_id].group_id
-        group_b = instance.piles[pile_b_id].group_id
-
-        mineral_x = rng.choice(solution.composition[pile_a_id])
-        mineral_y = rng.choice(solution.composition[pile_b_id])
-
-        if mineral_x == mineral_y:
-            continue
-        if not instance.minerals[mineral_x].is_eligible(group_b):
-            continue
-
-        candidates = [
-            m
-            for m in _eligible_minerals(instance, group_a)
-            if m not in (mineral_x, mineral_y)
-        ]
-        if candidates:
-            return (
-                (pile_a_id, mineral_x, rng.choice(candidates)),
-                (pile_b_id, mineral_y, mineral_x),
-            )
-
-    return None
-
-
-MoveSampler = Callable[[Solution, ProblemInstance, random.Random], "Move | None"]
 MoveEnumerator = Callable[[Solution, ProblemInstance], list[Move]]
-
-SAMPLERS: dict[str, MoveSampler] = {
-    "N1": sample_n1_move,
-    "N2": sample_n2_move,
-    "N3": sample_n3_move,
-}
 
 ENUMERATORS: dict[str, MoveEnumerator] = {
     "N1": n1_moves,
@@ -255,12 +270,12 @@ ENUMERATORS: dict[str, MoveEnumerator] = {
 
 
 def _random_neighbor(
-    sampler: MoveSampler,
+    name: str,
     solution: Solution,
     instance: ProblemInstance,
     rng: random.Random,
 ) -> Solution:
-    move = sampler(solution, instance, rng)
+    move = sample_move(name, solution, instance, rng)
     if move is None:
         return solution
     return apply_move(solution, move)
@@ -273,7 +288,7 @@ def n1_replace(
 ) -> Solution:
     """Replace one truck slot by another eligible mineral."""
 
-    return _random_neighbor(sample_n1_move, solution, instance, rng)
+    return _random_neighbor("N1", solution, instance, rng)
 
 
 def n2_swap(
@@ -283,7 +298,7 @@ def n2_swap(
 ) -> Solution:
     """Swap two truck slots from different piles while preserving eligibility."""
 
-    return _random_neighbor(sample_n2_move, solution, instance, rng)
+    return _random_neighbor("N2", solution, instance, rng)
 
 
 def n3_relocate_replace(
@@ -301,4 +316,4 @@ def n3_relocate_replace(
     Global mineral usage may change.
     """
 
-    return _random_neighbor(sample_n3_move, solution, instance, rng)
+    return _random_neighbor("N3", solution, instance, rng)

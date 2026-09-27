@@ -82,7 +82,7 @@ d_i^{min}\le\sum_p x_{ip}\le d_i^{max}.
 
 ## D007 — Política de tratamento de inviabilidade de qualidade e disponibilidade
 
-**Status:** CONSOLIDADA (Entrega 1; revisar com o grupo)
+**Status:** CONSOLIDADA
 
 **Escopo:** violações de SiO2, Al2O3 e disponibilidade global.
 
@@ -103,7 +103,7 @@ d_i^{min}\le\sum_p x_{ip}\le d_i^{max}.
 
 **Consequências:** depois de viável, a solução corrente não volta a ser inviável, e a travessia de regiões inviáveis fica limitada (Aula 04, slide 14). A perturbação pode gerar soluções inviáveis, que a VND usa como ponto de partida. \(V(X)\) permanece a soma linear das violações normalizadas (não a soma de quadrados da Aula 04), porque só é usado para ordenar soluções inviáveis entre si.
 
-**Evidência:** nas execuções de calibração (sementes 1001–1003, 100 mil avaliações), todas as execuções dos três objetivos chegaram à região viável, a primeira solução viável entre 298 e 4.963 avaliações. Nas 15 execuções finais (sementes 1–5, 200 mil avaliações), todas terminaram viáveis, com a primeira solução viável entre 256 e 7.540 avaliações.
+**Evidência:** ainda não há evidência experimental da configuração consolidada. Ela será produzida na calibração e nas execuções finais (D017).
 
 Ver `docs/feasibility_strategy.md` e `docs/gvns_decisoes.md`.
 
@@ -147,13 +147,13 @@ O movimento pode alterar o custo segundo:
 
 ## D009 — VNS ou GVNS
 
-**Status:** CONSOLIDADA (Entrega 1; revisar com o grupo)
+**Status:** CONSOLIDADA
 
 **Decisão:** GVNS (Aula 02, slides 36–38): perturbação P_k seguida de VND sobre N1 → N2 → N3, com troca de vizinhança "melhorou → volta para k=1 / ℓ=1; senão → próxima".
 
 **Alternativas consideradas:** VNS básica com uma única vizinhança de refinamento; RVNS.
 
-**Motivação:** o enunciado exige três vizinhanças. Na GVNS as três participam da busca local, e não só da perturbação. As vizinhanças são complementares: N1 altera o consumo global, N2 só redistribui entre pilhas, N3 faz as duas coisas.
+**Motivação:** o enunciado exige três vizinhanças. Na GVNS as três participam da busca local, e a perturbação tem estruturas próprias (D015). As vizinhanças são complementares: N1 altera o consumo global, N2 só redistribui entre pilhas, N3 faz as duas coisas.
 
 **Implementação:** `algorithms/gvns.py`.
 
@@ -161,15 +161,15 @@ O movimento pode alterar o custo segundo:
 
 ## D010 — Critério de parada e orçamento experimental
 
-**Status:** CONSOLIDADA (Entrega 1; revisar com o grupo)
+**Status:** CONSOLIDADA (critério); PENDENTE (valor do orçamento)
 
-**Decisão:** orçamento fixo de 200.000 avaliações de soluções candidatas por execução, igual para f1, f2 e f3. Não há critério auxiliar. O tempo é registrado como informação complementar.
+**Decisão:** o critério de parada é o número de avaliações de soluções candidatas por execução, igual para f1, f2 e f3, sem critério auxiliar. O tempo é registrado como informação complementar.
+
+O valor padrão é `GVNSConfig.max_evaluations = 200_000`, configurável por `--budget`. Esse número ainda não foi definido experimentalmente e deve ser revisto antes de congelar a configuração.
 
 **Alternativas consideradas:** tempo de parede; número de iterações da GVNS; iterações sem melhoria.
 
-**Motivação:** o número de avaliações não depende da máquina, coincide com o eixo x das curvas de convergência e permite comparação justa entre objetivos. Com cerca de 50 µs por avaliação, cada execução levou de 12 a 35 s.
-
-**Evidência (execuções finais):** da avaliação 100 mil à 200 mil, o melhor valor melhorou no máximo 1,4% (menos de 0,1% em 7 das 15 execuções). Ainda há melhorias pequenas perto do fim do orçamento.
+**Motivação:** o número de avaliações não depende da máquina, coincide com o eixo x das curvas de convergência e permite comparação justa entre objetivos.
 
 ---
 
@@ -194,64 +194,79 @@ O movimento pode alterar o custo segundo:
 
 ---
 
-## D013 — Heurística construtiva baseline
+## D013 — Heurística construtiva
 
 **Status:** CONSOLIDADA
 
 **Decisão:** a solução inicial é construída em duas fases. Primeiro, são atendidas as disponibilidades mínimas globais dos minérios, distribuindo esses caminhões apenas em pilhas elegíveis. Depois, os slots restantes são preenchidos com os minérios elegíveis de menor custo que ainda possuam disponibilidade máxima restante.
 
-**Motivação:** seguir a lógica sugerida no enunciado e garantir, já na construção, massa correta, elegibilidade e limites globais de disponibilidade.
+**Alternativas consideradas:** não foram comparadas outras construtivas.
 
-**Impacto:** a solução inicial pode continuar inviável quanto aos limites de SiO₂ e Al₂O₃. A política de tratamento dessas inviabilidades permanece pendente em D007.
+**Motivação:** segue a sugestão do enunciado e garante, já na construção, massa correta, elegibilidade e limites globais de disponibilidade. A escolha não se apoia em comparação empírica com outras construtivas, e não se afirma que ela seja superior a elas.
 
-**Evidência:** a solução construída tem custo R$ 59,34 mi, f2 = 14,90 e f3 = 7,00, e é inviável em SiO2 nas pilhas do Sinter 1 (≈ 7,1%) e levemente em Al2O3 em P1, P2 e P4. A GVNS chega à região viável a partir dela em todas as execuções (D007).
+**Consequências:** a solução inicial pode ser inviável quanto aos limites de SiO₂ e Al₂O₃, e isso é tratado pela regra de D007. A construtiva é determinística, então todas as execuções partem da mesma solução.
+
+**Observação:** na instância de exemplo, a solução construída tem custo R$ 59,34 mi, f2 = 14,90 e f3 = 7,00. Ela é inviável em SiO2 nas pilhas do Sinter 1 (≈ 7,1%) e levemente em Al2O3 em P1, P2 e P4.
 
 ---
 
-## D014 — Busca local: primeira melhoria, N1 completa, N2/N3 amostradas
+## D014 — Busca local: primeira melhoria e VND N1 → N2 → N3
 
-**Status:** CONSOLIDADA (Entrega 1; revisar com o grupo)
+**Status:** CONSOLIDADA (estrutura); PENDENTE (tamanho da amostra)
 
 **Decisão:**
 
-- busca local de primeira melhoria, repetida até não haver movimento de melhoria, com a vizinhança percorrida em ordem aleatória definida pela semente;
+- busca local de primeira melhoria, repetida até que uma passada não encontre movimento de melhoria, com a vizinhança percorrida em ordem aleatória definida pela semente;
 - VND na ordem N1 → N2 → N3, da vizinhança menor para a maior;
-- N1 é explorada por completo (cerca de 1.100 movimentos distintos);
-- N2 (cerca de 3.000 movimentos) e N3 (cerca de 10^5) são exploradas por uma amostra de 500 movimentos a cada passada;
-- movimentos definidos sobre os minérios distintos de cada pilha, porque posições com o mesmo minério geram a mesma solução. O conjunto de soluções alcançáveis é o mesmo das definições do enunciado (por posição).
+- movimentos definidos sobre os minérios distintos de cada pilha, porque posições com o mesmo minério geram a mesma solução. O conjunto de soluções alcançáveis é o mesmo das definições do enunciado (por posição);
+- N1 (cerca de 1.100 movimentos distintos) é explorada por completo, então o resultado da busca em N1 é um ótimo local de N1;
+- N2 (cerca de 3.000 movimentos) e N3 (cerca de 10^5) são exploradas por amostra. Em cada passada, sorteiam-se até `sample_size` movimentos **distintos**, uniformemente e sem reposição sobre o espaço de movimentos distintos (`vizinhancas.sample_moves`):
+  - N2: a vizinhança é enumerada e sorteada sem reposição;
+  - N3: os movimentos são agrupados por prefixo (pilha a, pilha b, m_x, m_y). Cada prefixo é sorteado com peso igual ao número de m_z válidos e depois m_z é sorteado uniformemente, o que dá probabilidade igual a cada movimento distinto sem enumerar a vizinhança. Repetições são descartadas até completar a amostra;
+- quando N2 ou N3 terminam sem melhoria, isso significa apenas que nenhum movimento da última amostra melhorou, e não que a solução é um ótimo local dessas vizinhanças.
 
-**Alternativas consideradas:** melhor melhoria; exploração completa de N1 e N2; amostragem das três vizinhanças.
+`sample_size = 500` é um valor padrão experimental, configurável em `GVNSConfig`.
 
-**Motivação:** melhor melhoria e exploração completa de N3 consumiriam o orçamento em poucos passos. A amostragem de N2 permite mais iterações da GVNS sem perda de qualidade observável.
+**Alternativas consideradas:** melhor melhoria; exploração completa de N2; sorteio por posição (slot), usado na primeira versão.
 
-**Evidência (calibração, sementes 1001–1003, 100 mil avaliações, média do valor final):**
+**Motivação:** melhor melhoria e exploração completa de N3 consumiriam o orçamento em poucos passos. O sorteio por posição dava mais chance aos minérios que ocupam mais posições de uma pilha e podia avaliar o mesmo movimento várias vezes na mesma passada. Por isso foi substituído pelo sorteio uniforme sem repetição.
 
-| Variante | f1 (R$) | f2 | f3 | iterações GVNS (f1) |
-|---|---|---|---|---|
-| A: N1 e N2 completas, N3 com 500 | 60.326.667 | 2,40616 | 1,44573 | 12–14 |
-| **B: N1 completa, N2/N3 com 500 (escolhida)** | **60.313.333** | **2,39516** | **1,44813** | **15–16** |
-| C: todas amostradas (300) | 60.320.000 | 2,39565 | 1,44702 | 34–39 |
-| D: como B, SHAKE com 2 mov./k e k_max=4 | 60.353.333 | 2,39498 | 1,45098 | 18–19 |
-
-As diferenças são menores que 1%. A variante B foi escolhida por ter o melhor ou quase o melhor resultado em f1 e f2 e por manter um ótimo local verdadeiro em N1.
+**Evidência:** a calibração feita com a primeira versão (sorteio por posição e SHAKE antigo) não vale para a configuração atual e foi descartada. O tamanho da amostra será recalibrado com seeds de calibração novas (D017).
 
 ---
 
-## D015 — Perturbação (SHAKE)
+## D015 — Perturbação (SHAKE) com estruturas próprias P1, P2, P3
 
-**Status:** CONSOLIDADA (Entrega 1; revisar com o grupo)
+**Status:** CONSOLIDADA (estrutura); PENDENTE (parâmetros)
 
-**Decisão:** P_k aplica k × 3 movimentos aleatórios, com k = 1..3 (k_max = 3). Cada movimento é sorteado de N1, N2 ou N3 com probabilidade igual. A solução perturbada é avaliada (conta no orçamento) e passada à VND.
+**Decisão:** a GVNS tem dois níveis separados:
 
-**Alternativas consideradas:** um movimento da vizinhança N_k; 2 movimentos por k com k_max = 4 (variante D de D014); reconstrução parcial de pilhas.
+- N1, N2 e N3 são usadas só pela VND, para intensificação;
+- o SHAKE usa estruturas próprias, de intensidade crescente (`algorithms/perturbacoes.py`), com k_max = 3.
 
-**Motivação:** a intensidade cresce com k, seguindo a lógica da VNS. Um único movimento, numa solução de 145 caminhões, seria desfeito pela VND. De 3 a 9 movimentos tiram a solução da bacia atual sem torná-la aleatória. Misturar as vizinhanças perturba tanto o consumo global quanto a distribuição entre pilhas.
+As estruturas são:
+
+- **P1 — perturbação pequena:** troca o minério de `p1_positions = 2` posições sorteadas por outro minério elegível;
+- **P2 — movimentos encadeados:** cadeia de ejeção em `p2_chain_length = 3` pilhas distintas. A primeira pilha recebe um minério novo, cada pilha seguinte recebe o minério que saiu da anterior, e o minério da última pilha sai da solução. A elegibilidade é exigida em cada elo;
+- **P3 — perturbação forte:** permutação cíclica de uma posição de cada uma de `p3_piles = 5` pilhas do mesmo grupo de sinter. Pilhas do mesmo grupo têm a mesma elegibilidade, então qualquer minério pode circular entre elas. O consumo global não muda; a qualidade de até 5 pilhas muda de uma vez.
+
+As perturbações sorteiam posições (caminhões) uniformemente, seguindo o enunciado. Isso é intencional: é um sorteio de caminhão, e não uma exploração de vizinhança.
+
+A solução perturbada é avaliada (conta no orçamento) e passada à VND.
+
+**Alternativas consideradas:** k × 3 movimentos aleatórios de N1, N2 e N3 (primeira versão, que misturava as vizinhanças da VND com a intensidade da perturbação); reconstrução parcial de pilhas.
+
+**Motivação:** separar intensificação (N_ℓ) de diversificação (P_k), como no pseudocódigo da GVNS da Aula 02. Quando a VND não melhora, o SHAKE passa progressivamente para regiões mais distantes: P1 altera 2 caminhões, P2 até 3 pilhas em cadeia, P3 até 5 pilhas.
+
+**Consequências:** P1 e P2 podem violar a disponibilidade; P3 não. As violações são tratadas por D007.
+
+**Evidência:** pendente. Os valores 2, 3 e 5 são padrões experimentais, configuráveis em `GVNSConfig`.
 
 ---
 
 ## D016 — Critério de aceitação
 
-**Status:** CONSOLIDADA (Entrega 1; revisar com o grupo)
+**Status:** CONSOLIDADA
 
 **Decisão:** X'' substitui X somente se for estritamente melhor pela regra de D007, com tolerância relativa de 10^-12 para ignorar ruído de ponto flutuante.
 
@@ -263,10 +278,20 @@ As diferenças são menores que 1%. A variante B foi escolhida por ter o melhor 
 
 ## D017 — Sementes e separação entre calibração e resultados finais
 
-**Status:** CONSOLIDADA
+**Status:** CONSOLIDADA (separação); PENDENTE (seeds finais)
 
-**Decisão:** calibração com as sementes 1001, 1002 e 1003. Resultados finais com as sementes 1, 2, 3, 4 e 5, fixadas antes de gerar os resultados reportados. O desvio-padrão reportado é o amostral (n−1). A construtiva é determinística, então as execuções diferem apenas pela semente da GVNS.
+**Decisão:**
 
-**Motivação:** aplicar D011 e evitar a escolha de parâmetros com base nos resultados finais.
+- calibração e resultados finais usam conjuntos de seeds disjuntos;
+- as 5 seeds finais serão escolhidas e registradas aqui **depois** de congelar o algoritmo e os parâmetros, e **antes** de gerar os resultados finais;
+- elas devem ser diferentes de todas as seeds já usadas:
+  - 1–5 (rodada descartada, feita com a primeira versão);
+  - 1001–1003 (calibração da primeira versão);
+  - 2001 (verificação da versão atual);
+  - as dos testes automatizados (0, 1, 3, 5, 7, 11, 13, 17, 21 e 42);
+- os resultados finais entram num commit ou PR separado da implementação;
+- o desvio-padrão reportado é o amostral (n−1). A construtiva é determinística, então as execuções diferem apenas pela seed da GVNS.
 
-**Implementação:** `scripts/run_mono_experiments.py`.
+`scripts/run_mono_experiments.py` exige `--seeds` e não tem seeds padrão, para evitar que resultados finais sejam gerados sem querer.
+
+**Motivação:** aplicar D011. As seeds 1–5 já tiveram os resultados observados, então não podem ser as seeds finais.

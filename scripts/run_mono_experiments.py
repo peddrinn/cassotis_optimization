@@ -8,9 +8,12 @@ Outputs (in --out, default results/mono):
     convergence_<objective>.png        5 overlaid convergence curves
     best_solution_<objective>.png      best solution of the 5 runs
 
+Seeds are mandatory: the final seeds are chosen and recorded before the final
+run, after the algorithm and its parameters are frozen (D017).
+
 Usage:
-    python scripts/run_mono_experiments.py
-    python scripts/run_mono_experiments.py --budget 20000 --out results/smoke
+    python scripts/run_mono_experiments.py --seeds S1 S2 S3 S4 S5
+    python scripts/run_mono_experiments.py --seeds 1 2 --budget 20000 --out results/smoke
 """
 
 from __future__ import annotations
@@ -28,9 +31,6 @@ from cassotis_optimization.io import load_instance
 from cassotis_optimization.solution import Solution
 from cassotis_optimization.visualization import plot_convergence, plot_solution, plt
 
-# Final seeds, fixed before producing the reported results (D011).
-# Calibration used a disjoint set (1001, 1002, 1003).
-FINAL_SEEDS = (1, 2, 3, 4, 5)
 OBJECTIVES = ("f1", "f2", "f3")
 
 
@@ -54,7 +54,7 @@ def main() -> None:
     parser.add_argument("--instance", default="data/example_instance")
     parser.add_argument("--out", default="results/mono")
     parser.add_argument("--budget", type=int, default=GVNSConfig.max_evaluations)
-    parser.add_argument("--seeds", type=int, nargs="+", default=list(FINAL_SEEDS))
+    parser.add_argument("--seeds", type=int, nargs="+", required=True)
     parser.add_argument("--objectives", nargs="+", default=list(OBJECTIVES))
     args = parser.parse_args()
 
@@ -130,9 +130,11 @@ def main() -> None:
         writer.writerows(rows)
 
     lines = [
-        f"# Resultados mono-objetivo (GVNS)\n",
-        f"Versão do código: `{version}` — instância: `{args.instance}` — "
-        f"orçamento: {args.budget} avaliações — seeds: {args.seeds}\n",
+        "# Resultados mono-objetivo (GVNS)\n",
+        (
+            f"Versão do código: `{version}` — instância: `{args.instance}` — "
+            f"orçamento: {args.budget} avaliações — seeds: {args.seeds}\n"
+        ),
         "Desvio-padrão amostral (n-1) sobre o valor final de cada execução.\n",
         "| Objetivo | factíveis | mín | std | máx | tempo médio (s) |",
         "|---|---|---|---|---|---|",
