@@ -1,0 +1,120 @@
+{
+  "phase": "pilot",
+  "protocol_path": "/run/media/pedro/Dados/ENGENHARIA DE SISTEMAS/Teoria da Decisão/20262/TP/cassotis_optimization/data/protocolo_entrega2.json",
+  "protocol": {
+    "status": "PROPOSTO_PENDENTE_DE_PILOTO",
+    "reference_file": "data/referencias_multiobjetivo.json",
+    "weighted_sum": {
+      "simplex_denominator": 4,
+      "include_equal_weights": true,
+      "expected_configurations": 16
+    },
+    "epsilon_restricted": {
+      "primary_objective": "f1",
+      "levels_f2": [
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "levels_f3": [
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "expected_configurations": 16
+    },
+    "pilot": {
+      "seeds": [
+        4001,
+        4002
+      ],
+      "max_evaluations": 50000
+    },
+    "final": {
+      "seeds": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "max_evaluations": 200000
+    },
+    "gvns": {
+      "sample_size": 250,
+      "p1_positions": 3,
+      "p2_chain_length": 4,
+      "p3_piles": 5
+    }
+  },
+  "instance": "/run/media/pedro/Dados/ENGENHARIA DE SISTEMAS/Teoria da Decisão/20262/TP/cassotis_optimization/data/example_instance",
+  "git_version": "6d66821",
+  "planned_runs": 64,
+  "selected_runs": 64,
+  "complete": true,
+  "analysis": {
+    "completed_runs": 64,
+    "complete": true,
+    "methods": {
+      "weighted_sum": {
+        "runs": 32,
+        "original_feasible_runs": 32,
+        "scalar_feasible_runs": 32,
+        "unique_nondominated_vectors": 26,
+        "scalar_feasible_by_configuration": {
+          "w01": 2,
+          "w02": 2,
+          "w03": 2,
+          "w04": 2,
+          "w05": 2,
+          "w06": 2,
+          "w07": 2,
+          "w08": 2,
+          "w09": 2,
+          "w10": 2,
+          "w11": 2,
+          "w12": 2,
+          "w13": 2,
+          "w14": 2,
+          "w15": 2,
+          "w16": 2
+        },
+        "nondominated_points_by_seed": {
+          "4001": 12,
+          "4002": 14
+        }
+      },
+      "epsilon_restricted": {
+        "runs": 32,
+        "original_feasible_runs": 32,
+        "scalar_feasible_runs": 32,
+        "unique_nondominated_vectors": 25,
+        "scalar_feasible_by_configuration": {
+          "e01": 2,
+          "e02": 2,
+          "e03": 2,
+          "e04": 2,
+          "e05": 2,
+          "e06": 2,
+          "e07": 2,
+          "e08": 2,
+          "e09": 2,
+          "e10": 2,
+          "e11": 2,
+          "e12": 2,
+          "e13": 2,
+          "e14": 2,
+          "e15": 2,
+          "e16": 2
+        },
+        "nondominated_points_by_seed": {
+          "4001": 12,
+          "4002": 13
+        }
+      }
+    },
+    "joint_nondominated_vectors": 51
+  }
+}
