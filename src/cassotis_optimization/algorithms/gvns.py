@@ -38,6 +38,16 @@ from cassotis_optimization.algorithms.vizinhancas import (
 from cassotis_optimization.domain import ProblemInstance
 from cassotis_optimization.evaluator import Evaluation, evaluate
 from cassotis_optimization.feasibility import feasibility_rule_key, normalized_violation
+from cassotis_optimization.multiobjective.epsilon_restrito import (
+    epsilon_objective,
+    epsilon_violations,
+)
+from cassotis_optimization.multiobjective.multiobjective import (
+    EpsilonLimits,
+    ObjectiveBounds,
+    Weights,
+)
+from cassotis_optimization.multiobjective.soma_ponderada import weighted_sum
 from cassotis_optimization.objectives import ObjectiveName, objective_value
 from cassotis_optimization.solution import Solution
 
@@ -60,6 +70,44 @@ class GVNSConfig:
     p2_chain_length: int = 3
     p3_piles: int = 5
 
+    # Parâmetros específicos da Entrega 2
+    bounds: ObjectiveBounds | None = None
+    weights: Weights | None = None
+    epsilon_limits: EpsilonLimits | None = None
+
+    def __post_init__(self) -> None:
+        if self.objective in ("f1", "f2", "f3"):
+            if any(
+                value is not None
+                for value in (self.bounds, self.weights, self.epsilon_limits)
+            ):
+                raise ValueError(
+                    "O modo mono-objetivo não aceita parâmetros multiobjetivo."
+                )
+
+        elif self.objective == "weighted_sum":
+            if (
+                self.bounds is None
+                or self.weights is None
+                or self.epsilon_limits is not None
+            ):
+                raise ValueError(
+                    "Soma Ponderada exige bounds e weights, sem epsilon_limits."
+                )
+
+        elif self.objective == "epsilon_restricted":
+            if (
+                self.bounds is None
+                or self.epsilon_limits is None
+                or self.weights is not None
+            ):
+                raise ValueError(
+                    "Epsilon-restrito exige bounds e epsilon_limits, sem weights."
+                )
+
+        else:
+            raise ValueError(f"Objetivo desconhecido: {self.objective}")
+
     @property
     def k_max(self) -> int:
         return 3
@@ -71,14 +119,21 @@ class Candidate:
     evaluation: Evaluation
     violation: float
     objective: float
+    search_feasible: bool | None = None
 
     @property
     def feasible(self) -> bool:
-        return self.evaluation.feasible
+        if self.search_feasible is None:
+            return self.evaluation.feasible
+        return self.search_feasible
 
     @property
     def key(self) -> tuple[int, float, float]:
-        return feasibility_rule_key(self.feasible, self.violation, self.objective)
+        return feasibility_rule_key(
+            self.feasible,
+            self.violation,
+            self.objective,
+        )
 
 
 # Relative tolerance used to ignore floating-point noise when comparing keys.
@@ -113,22 +168,83 @@ class HistoryPoint:
     violation: float
 
 
+
+
 class CountingEvaluator:
-    """Evaluates solutions, counts evaluations and keeps the best-so-far curve."""
+    """Avalia soluções e aplica o critério escalar configurado."""
 
     def __init__(
         self,
         instance: ProblemInstance,
-        objective: ObjectiveName,
-        max_evaluations: int,
+        config: GVNSConfig,
     ) -> None:
         self.instance = instance
-        self.objective = objective
-        self.max_evaluations = max_evaluations
+        self.config = config
+        self.max_evaluations = config.max_evaluations
         self.evaluations = 0
         self.best: Candidate | None = None
         self.history: list[HistoryPoint] = []
         self.first_feasible_at: int | None = None
+
+    def _score(
+        self,
+        evaluation: Evaluation,
+    ) -> tuple[float, float, bool]:
+        """
+        Retorna:
+            objetivo escalar,
+            violação usada pela GVNS,
+            factibilidade usada pela GVNS.
+        """
+        config = self.config
+
+        original_violation = normalized_violation(
+            evaluation, self.instance
+        ).total
+
+        # Entrega 1: comportamento original.
+        if config.objective in ("f1", "f2", "f3"):
+            return (
+                objective_value(evaluation, config.objective),
+                original_violation,
+                evaluation.feasible,
+            )
+
+        bounds = config.bounds
+        assert bounds is not None
+
+        # Entrega 2: Soma Ponderada.
+        if config.objective == "weighted_sum":
+            weights = config.weights
+            assert weights is not None
+
+            return (
+                weighted_sum(evaluation, bounds, weights),
+                original_violation,
+                evaluation.feasible,
+            )
+
+        # Entrega 2: epsilon-restrito.
+        limits = config.epsilon_limits
+        assert limits is not None
+
+        v2, v3 = epsilon_violations(
+            evaluation, bounds, limits
+        )
+
+        epsilon_violation = v2 + v3
+
+        search_feasible = (
+            evaluation.feasible
+            and v2 == 0.0
+            and v3 == 0.0
+        )
+
+        return (
+            epsilon_objective(evaluation, bounds),
+            original_violation + epsilon_violation,
+            search_feasible,
+        )
 
     def __call__(self, solution: Solution) -> Candidate:
         if self.evaluations >= self.max_evaluations:
@@ -137,17 +253,22 @@ class CountingEvaluator:
         evaluation = evaluate(solution, self.instance)
         self.evaluations += 1
 
+        objective, violation, feasible = self._score(evaluation)
+
         candidate = Candidate(
             solution=solution,
             evaluation=evaluation,
-            violation=normalized_violation(evaluation, self.instance).total,
-            objective=objective_value(evaluation, self.objective),
+            violation=violation,
+            objective=objective,
+            search_feasible=feasible,
         )
 
         if self.best is None or is_better(candidate, self.best):
             self.best = candidate
+
             if candidate.feasible and self.first_feasible_at is None:
                 self.first_feasible_at = self.evaluations
+
             self._record(candidate)
 
         return candidate
@@ -161,6 +282,7 @@ class CountingEvaluator:
                 violation=candidate.violation,
             )
         )
+
 
 
 @dataclass
@@ -185,9 +307,7 @@ class GVNS:
         self.instance = instance
         self.config = config
         self.rng = random.Random(config.seed)
-        self.evaluator = CountingEvaluator(
-            instance, config.objective, config.max_evaluations
-        )
+        self.evaluator = CountingEvaluator(instance, config)
         self.stats = {f"improvements_{name}": 0 for name in config.neighborhood_order}
         self.stats.update({f"shake_P{k}": 0 for k in range(1, config.k_max + 1)})
 

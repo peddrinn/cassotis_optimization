@@ -410,7 +410,17 @@ e `multiobjective/soma_ponderada.py`.
 
 **Validação:** `tests/test_soma_ponderada.py`.
 
-**Integração à GVNS:** PENDENTE.
+**Integração à GVNS:** a configuração `objective="weighted_sum"`
+seleciona a soma ponderada dos objetivos normalizados como
+critério de comparação entre soluções factíveis.
+
+A factibilidade e a medida de violação originais permanecem
+inalteradas. A escolha dos pesos é fixa durante cada execução.
+
+**Implementação:** `GVNSConfig` e `CountingEvaluator` em
+`algorithms/gvns.py`.
+
+**Validação da integração:** `tests/test_multiobjective_gvns.py`.
 
 **Grade experimental de pesos:** será registrada em D021.
 A grade proposta ainda precisa ser validada.
@@ -487,4 +497,31 @@ e `multiobjective/epsilon_restrito.py`.
 
 **Validação:** `tests/test_epsilon_restrito.py`.
 
-**Integração à GVNS:** PENDENTE.
+
+**Integração à GVNS:** a configuração
+`objective="epsilon_restricted"` seleciona o custo normalizado
+como objetivo principal e acrescenta as duas restrições epsilon
+ao critério de factibilidade.
+
+`Evaluation.feasible` continua indicando apenas a factibilidade
+original. A propriedade `Candidate.feasible` representa a
+factibilidade efetiva utilizada na busca.
+
+A violação agregada utilizada entre soluções inviáveis é:
+
+\[
+V_\varepsilon(X)=V(X)+v_{\varepsilon_2}(X)+v_{\varepsilon_3}(X).
+\]
+
+A agregação por soma é uma escolha heurística. As parcelas epsilon
+são medidas na escala normalizada dos objetivos, enquanto V(X)
+segue a normalização das restrições originais definida em D007.
+
+**Consequência:** configurações epsilon excessivamente restritivas
+podem não alcançar soluções factíveis dentro do orçamento disponível.
+
+**Implementação:** `GVNSConfig`, `Candidate` e `CountingEvaluator`
+em `algorithms/gvns.py`.
+
+**Validação da integração:** `tests/test_multiobjective_gvns.py`.
+
