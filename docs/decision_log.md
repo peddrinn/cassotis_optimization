@@ -529,7 +529,7 @@ em `algorithms/gvns.py`.
 
 ## D021 — Planejamento experimental multiobjetivo
 
-**Status:** PENDENTE
+**Status:** CONSOLIDADA
 
 **Decisão proposta:** comparar as abordagens Soma Ponderada e
 epsilon-restrito com 16 configurações escalares cada, utilizando
@@ -643,6 +643,39 @@ sem selecionar configurações após observar os resultados finais.
 **Critério de consolidação:** concluir o piloto, documentar
 eventuais alterações, congelar o protocolo e somente então
 executar as cinco replicações oficiais.
+
+
+### Consolidação após execução exploratória
+
+Foram comparados três orçamentos de avaliações:
+50.000, 100.000 e 200.000, mantendo constantes as
+16 configurações de cada abordagem, as seeds 4001 e 4002
+e os parâmetros da GVNS.
+
+Todas as 64 execuções foram factíveis nos três orçamentos.
+
+Entre 100.000 e 200.000 avaliações, 27 das 32 execuções
+de cada abordagem melhoraram seu objetivo escalar.
+Nenhuma apresentou piora.
+
+No epsilon-restrito, as inversões de monotonicidade do
+custo entre configurações aninhadas diminuíram de
+7 (50k) para 4 (100k) e 2 (200k).
+
+Essas inversões são atribuídas à natureza heurística da
+busca e não representam violação da formulação matemática.
+
+**Decisão consolidada:** manter 200.000 avaliações por
+execução, 16 configurações por abordagem, cinco seeds
+finais (2021 a 2025), sample_size=250 e SHAKE 3/4/5.
+
+As referências de normalização da D018 permanecem fixas.
+A grade experimental e o algoritmo ficam congelados antes
+de produzir os resultados oficiais.
+
+**Evidências:** results/multi_pilot,
+results/multi_smoke100k e results/multi_smoke200k.
+
 
 ---
 

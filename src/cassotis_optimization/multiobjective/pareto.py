@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 
-
 OBJECTIVE_KEYS = ("f1", "f2", "f3")
 
 

@@ -1,5 +1,6 @@
 """Verificacoes do executor e do agrupamento de resultados."""
 from __future__ import annotations
+
 import importlib.util
 import json
 from pathlib import Path

@@ -1,8 +1,11 @@
 import json
 from pathlib import Path
+
 import pytest
+
 from cassotis_optimization.multiobjective.multiobjective import EpsilonLimits, Weights
 from cassotis_optimization.multiobjective.planejamento import epsilon_grid, weight_grid
+
 PROTOCOL=Path(__file__).resolve().parents[1]/"data/protocolo_entrega2.json"
 def test_weight_grid():
     grid=weight_grid(4,include_equal_weights=True)

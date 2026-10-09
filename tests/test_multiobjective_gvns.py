@@ -1,12 +1,18 @@
 from pathlib import Path
+
 import pytest
+
 from cassotis_optimization.algorithms.gvns import CountingEvaluator, GVNSConfig, run_gvns
 from cassotis_optimization.feasibility import normalized_violation
 from cassotis_optimization.io import load_instance
+from cassotis_optimization.multiobjective.epsilon_restrito import (
+    epsilon_objective,
+    epsilon_violations,
+)
 from cassotis_optimization.multiobjective.multiobjective import EpsilonLimits, Weights
 from cassotis_optimization.multiobjective.normalizacao import load_bounds
 from cassotis_optimization.multiobjective.soma_ponderada import weighted_sum
-from cassotis_optimization.multiobjective.epsilon_restrito import epsilon_objective, epsilon_violations
+
 ROOT=Path(__file__).resolve().parents[1]
 REFERENCE_FILE=ROOT/"data/referencias_multiobjetivo.json"
 INSTANCE_DIR=ROOT/"data/example_instance"

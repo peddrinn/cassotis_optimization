@@ -1,6 +1,6 @@
 
 {
-  "status": "PROPOSTO_PENDENTE_DE_PILOTO",
+  "status": "CONGELADO",
   "reference_file": "data/referencias_multiobjetivo.json",
   "weighted_sum": {
     "simplex_denominator": 4,
