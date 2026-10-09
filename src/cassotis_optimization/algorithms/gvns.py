@@ -52,6 +52,7 @@ from cassotis_optimization.objectives import ObjectiveName, objective_value
 from cassotis_optimization.solution import Solution
 
 
+
 @dataclass(frozen=True)
 class GVNSConfig:
     objective: ObjectiveName

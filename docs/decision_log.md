@@ -644,3 +644,32 @@ sem selecionar configurações após observar os resultados finais.
 eventuais alterações, congelar o protocolo e somente então
 executar as cinco replicações oficiais.
 
+---
+
+## D022 — Executor multiobjetivo, reprodutibilidade e filtro de Pareto
+
+**Status:** CONFIRMADA (pendente validação integral da execução no repositório)
+
+**Decisão:** executar cada configuração de pesos e limites ε com todas as seeds definidas na D021, armazenando um JSON por execução, um CSV agregado, a análise de factibilidade e os vetores não dominados por abordagem.
+
+**Implementação:** `scripts/run_multi_experiments.py`; `multiobjective/pareto.py`.
+
+**Justificativa:** cada execução deve ser rastreável e retomável. O mesmo orçamento de avaliações por configuração permite comparação controlada entre Soma Ponderada e ε-restrito. A busca não fornece certificado de ótimo global, portanto as frentes são aproximadas.
+
+**Regras de análise:**
+
+- Identificar factibilidade original separadamente da factibilidade do problema escalar; no ε-restrito só a segunda permite incluir o resultado na frente.
+- Identificar dominância no espaço completo `(f1, f2, f3)` original, com três critérios minimizados; somente então gerar as projeções em pares.
+- A frente não dominada é computada separadamente para cada método. As melhores soluções finais de cada configuração e seed constituem o conjunto candidato; não se afirma que as frentes são globalmente Pareto-ótimas.
+- Colapsar na visualização vetores objetivo numericamente coincidentes, preservando todos os identificadores de origem.
+- Manter pilotos, smoke e execuções oficiais em pastas separadas.
+- Persistir resultados a cada execução e impedir a reutilização de um mesmo arquivo quando a assinatura da configuração divergir.
+
+**Condição para execução final:** somente depois de analisar o piloto e registrar/congelar D021. O executor rejeita `--phase final` enquanto `data/protocolo_entrega2.json` estiver com status diferente de `CONGELADO`.
+
+**Alternativas consideradas:** gerar apenas figuras sem histórico por execução; filtrar separadamente cada projeção 2D; misturar seeds de calibração e oficiais; rodar a fase final antes de avaliar a factibilidade da grade.
+
+**Consequências:** a execução completa gera muitos arquivos, mas permite auditoria/reprodução. As projeções 2D podem conter pontos que seriam dominados naquele par isoladamente, pois o filtro correto foi calculado em 3D.
+
+**Validação:** `tests/test_pareto_multiobjetivo.py`, `tests/test_planejamento_multiobjetivo.py`, `tests/test_multiobjective_gvns.py` e execução exploratória da D021.
+
