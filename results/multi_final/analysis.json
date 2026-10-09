@@ -1,0 +1,69 @@
+{
+  "completed_runs": 160,
+  "complete": true,
+  "methods": {
+    "weighted_sum": {
+      "runs": 80,
+      "original_feasible_runs": 80,
+      "scalar_feasible_runs": 80,
+      "unique_nondominated_vectors": 45,
+      "scalar_feasible_by_configuration": {
+        "w01": 5,
+        "w02": 5,
+        "w03": 5,
+        "w04": 5,
+        "w05": 5,
+        "w06": 5,
+        "w07": 5,
+        "w08": 5,
+        "w09": 5,
+        "w10": 5,
+        "w11": 5,
+        "w12": 5,
+        "w13": 5,
+        "w14": 5,
+        "w15": 5,
+        "w16": 5
+      },
+      "nondominated_points_by_seed": {
+        "2021": 7,
+        "2022": 11,
+        "2023": 8,
+        "2024": 10,
+        "2025": 9
+      }
+    },
+    "epsilon_restricted": {
+      "runs": 80,
+      "original_feasible_runs": 80,
+      "scalar_feasible_runs": 80,
+      "unique_nondominated_vectors": 49,
+      "scalar_feasible_by_configuration": {
+        "e01": 5,
+        "e02": 5,
+        "e03": 5,
+        "e04": 5,
+        "e05": 5,
+        "e06": 5,
+        "e07": 5,
+        "e08": 5,
+        "e09": 5,
+        "e10": 5,
+        "e11": 5,
+        "e12": 5,
+        "e13": 5,
+        "e14": 5,
+        "e15": 5,
+        "e16": 5
+      },
+      "nondominated_points_by_seed": {
+        "2021": 8,
+        "2022": 11,
+        "2023": 10,
+        "2024": 10,
+        "2025": 10
+      }
+    }
+  },
+  "joint_nondominated_vectors": 91
+}
