@@ -1,0 +1,980 @@
+{
+  "run_id": "epsilon_restricted_e08_seed4002",
+  "phase": "pilot",
+  "method": "epsilon_restricted",
+  "configuration": "e08",
+  "seed": 4002,
+  "original_feasible": true,
+  "scalar_feasible": true,
+  "f1": 61400000.0,
+  "f2": 4.417372610372593,
+  "f3": 4.863814488027652,
+  "norm_f1": 0.2777777777777778,
+  "norm_f2": 0.495637012949141,
+  "norm_f3": 0.6728989160969434,
+  "scalar_objective": 0.2777777777777778,
+  "total_violation": 0.0,
+  "epsilon_violation_f2": 0.0,
+  "epsilon_violation_f3": 0.0,
+  "evaluations": 100000,
+  "first_feasible_at": 805,
+  "runtime_seconds": 11.44862773999921,
+  "iterations": 22,
+  "improvements": 4,
+  "weights": null,
+  "epsilon_limits": {
+    "f2": 0.5,
+    "f3": 1.0
+  },
+  "code_version": "4ca5d17",
+  "config_hash": "d9c91c8cad8b1202557446aca27149ed6894d8f8d7d2584cb0d7d9fbef7d99d0",
+  "parameters": {
+    "objective": "epsilon_restricted",
+    "seed": 4002,
+    "max_evaluations": 100000,
+    "neighborhood_order": [
+      "N1",
+      "N2",
+      "N3"
+    ],
+    "exhaustive_neighborhoods": [
+      "N1"
+    ],
+    "sample_size": 250,
+    "p1_positions": 3,
+    "p2_chain_length": 4,
+    "p3_piles": 5,
+    "bounds": {
+      "ideal": [
+        59700000.0,
+        2.3730254273702003,
+        1.4207622050785091
+      ],
+      "reference": [
+        65820000.0,
+        6.497711698958577,
+        6.537507381189193
+      ]
+    },
+    "weights": null,
+    "epsilon_limits": {
+      "f2": 0.5,
+      "f3": 1.0
+    }
+  },
+  "stats": {
+    "improvements_N1": 433,
+    "improvements_N2": 0,
+    "improvements_N3": 5,
+    "shake_P1": 9,
+    "shake_P2": 7,
+    "shake_P3": 6
+  },
+  "history": [
+    {
+      "evaluations": 1,
+      "feasible": false,
+      "objective": -0.058823529411764705,
+      "violation": 6.589646405589081
+    },
+    {
+      "evaluations": 3,
+      "feasible": false,
+      "objective": -0.029411764705882353,
+      "violation": 6.559417940092258
+    },
+    {
+      "evaluations": 6,
+      "feasible": false,
+      "objective": 0.0,
+      "violation": 6.4281020657203864
+    },
+    {
+      "evaluations": 25,
+      "feasible": false,
+      "objective": 0.05228758169934641,
+      "violation": 5.892612649522315
+    },
+    {
+      "evaluations": 31,
+      "feasible": false,
+      "objective": 0.05555555555555555,
+      "violation": 5.765436705004717
+    },
+    {
+      "evaluations": 35,
+      "feasible": false,
+      "objective": 0.08496732026143791,
+      "violation": 5.382535739764453
+    },
+    {
+      "evaluations": 36,
+      "feasible": false,
+      "objective": 0.0718954248366013,
+      "violation": 5.331519646057103
+    },
+    {
+      "evaluations": 37,
+      "feasible": false,
+      "objective": 0.08823529411764706,
+      "violation": 5.325072416853974
+    },
+    {
+      "evaluations": 38,
+      "feasible": false,
+      "objective": 0.10784313725490197,
+      "violation": 5.206412703683994
+    },
+    {
+      "evaluations": 40,
+      "feasible": false,
+      "objective": 0.1568627450980392,
+      "violation": 5.138174790984808
+    },
+    {
+      "evaluations": 42,
+      "feasible": false,
+      "objective": 0.1830065359477124,
+      "violation": 4.877301825223835
+    },
+    {
+      "evaluations": 44,
+      "feasible": false,
+      "objective": 0.21568627450980393,
+      "violation": 4.476966802582847
+    },
+    {
+      "evaluations": 46,
+      "feasible": false,
+      "objective": 0.20588235294117646,
+      "violation": 4.4765638507576515
+    },
+    {
+      "evaluations": 47,
+      "feasible": false,
+      "objective": 0.21241830065359477,
+      "violation": 4.466574314344295
+    },
+    {
+      "evaluations": 56,
+      "feasible": false,
+      "objective": 0.22549019607843138,
+      "violation": 4.424293652935187
+    },
+    {
+      "evaluations": 59,
+      "feasible": false,
+      "objective": 0.2679738562091503,
+      "violation": 4.135022514097703
+    },
+    {
+      "evaluations": 61,
+      "feasible": false,
+      "objective": 0.2908496732026144,
+      "violation": 4.125594187595209
+    },
+    {
+      "evaluations": 62,
+      "feasible": false,
+      "objective": 0.3137254901960784,
+      "violation": 3.9755873058714464
+    },
+    {
+      "evaluations": 65,
+      "feasible": false,
+      "objective": 0.3431372549019608,
+      "violation": 3.8162404107090104
+    },
+    {
+      "evaluations": 67,
+      "feasible": false,
+      "objective": 0.3660130718954248,
+      "violation": 3.78673909461921
+    },
+    {
+      "evaluations": 69,
+      "feasible": false,
+      "objective": 0.38235294117647056,
+      "violation": 3.720291841173064
+    },
+    {
+      "evaluations": 75,
+      "feasible": false,
+      "objective": 0.42483660130718953,
+      "violation": 3.2512345360788473
+    },
+    {
+      "evaluations": 76,
+      "feasible": false,
+      "objective": 0.41830065359477125,
+      "violation": 3.0470208135655366
+    },
+    {
+      "evaluations": 78,
+      "feasible": false,
+      "objective": 0.4444444444444444,
+      "violation": 2.996471401514923
+    },
+    {
+      "evaluations": 82,
+      "feasible": false,
+      "objective": 0.4673202614379085,
+      "violation": 2.8344706968964934
+    },
+    {
+      "evaluations": 89,
+      "feasible": false,
+      "objective": 0.5163398692810458,
+      "violation": 2.7779578847376882
+    },
+    {
+      "evaluations": 92,
+      "feasible": false,
+      "objective": 0.5196078431372549,
+      "violation": 2.727754853194913
+    },
+    {
+      "evaluations": 93,
+      "feasible": false,
+      "objective": 0.5620915032679739,
+      "violation": 2.6983848678597635
+    },
+    {
+      "evaluations": 94,
+      "feasible": false,
+      "objective": 0.5816993464052288,
+      "violation": 2.6849268251320053
+    },
+    {
+      "evaluations": 110,
+      "feasible": false,
+      "objective": 0.6241830065359477,
+      "violation": 2.6297616446751713
+    },
+    {
+      "evaluations": 112,
+      "feasible": false,
+      "objective": 0.630718954248366,
+      "violation": 2.603043471612711
+    },
+    {
+      "evaluations": 117,
+      "feasible": false,
+      "objective": 0.6339869281045751,
+      "violation": 2.559630292487289
+    },
+    {
+      "evaluations": 119,
+      "feasible": false,
+      "objective": 0.6372549019607843,
+      "violation": 2.5517137967650783
+    },
+    {
+      "evaluations": 127,
+      "feasible": false,
+      "objective": 0.6078431372549019,
+      "violation": 2.52402643016699
+    },
+    {
+      "evaluations": 129,
+      "feasible": false,
+      "objective": 0.6209150326797386,
+      "violation": 2.404689267647297
+    },
+    {
+      "evaluations": 135,
+      "feasible": false,
+      "objective": 0.6470588235294118,
+      "violation": 2.117142304154562
+    },
+    {
+      "evaluations": 137,
+      "feasible": false,
+      "objective": 0.6862745098039216,
+      "violation": 2.064482030445532
+    },
+    {
+      "evaluations": 145,
+      "feasible": false,
+      "objective": 0.738562091503268,
+      "violation": 2.0415846660823327
+    },
+    {
+      "evaluations": 149,
+      "feasible": false,
+      "objective": 0.7549019607843137,
+      "violation": 1.8520900570532641
+    },
+    {
+      "evaluations": 151,
+      "feasible": false,
+      "objective": 0.761437908496732,
+      "violation": 1.686921464268027
+    },
+    {
+      "evaluations": 153,
+      "feasible": false,
+      "objective": 0.7745098039215687,
+      "violation": 1.6811188811188802
+    },
+    {
+      "evaluations": 162,
+      "feasible": false,
+      "objective": 0.8071895424836601,
+      "violation": 1.4407342657342652
+    },
+    {
+      "evaluations": 164,
+      "feasible": false,
+      "objective": 0.7908496732026143,
+      "violation": 1.4407342657342652
+    },
+    {
+      "evaluations": 167,
+      "feasible": false,
+      "objective": 0.803921568627451,
+      "violation": 1.36060606060606
+    },
+    {
+      "evaluations": 171,
+      "feasible": false,
+      "objective": 0.7908496732026143,
+      "violation": 1.36060606060606
+    },
+    {
+      "evaluations": 176,
+      "feasible": false,
+      "objective": 0.7483660130718954,
+      "violation": 1.36060606060606
+    },
+    {
+      "evaluations": 177,
+      "feasible": false,
+      "objective": 0.7516339869281046,
+      "violation": 1.277272727272727
+    },
+    {
+      "evaluations": 184,
+      "feasible": false,
+      "objective": 0.7941176470588235,
+      "violation": 1.0689393939393936
+    },
+    {
+      "evaluations": 187,
+      "feasible": false,
+      "objective": 0.7679738562091504,
+      "violation": 1.0400932400932394
+    },
+    {
+      "evaluations": 188,
+      "feasible": false,
+      "objective": 0.7450980392156863,
+      "violation": 1.0400932400932394
+    },
+    {
+      "evaluations": 189,
+      "feasible": false,
+      "objective": 0.7156862745098039,
+      "violation": 0.9150932400932394
+    },
+    {
+      "evaluations": 200,
+      "feasible": false,
+      "objective": 0.6993464052287581,
+      "violation": 0.9150932400932394
+    },
+    {
+      "evaluations": 202,
+      "feasible": false,
+      "objective": 0.7091503267973857,
+      "violation": 0.9067599067599057
+    },
+    {
+      "evaluations": 208,
+      "feasible": false,
+      "objective": 0.6862745098039216,
+      "violation": 0.9067599067599057
+    },
+    {
+      "evaluations": 210,
+      "feasible": false,
+      "objective": 0.6797385620915033,
+      "violation": 0.8242506866600248
+    },
+    {
+      "evaluations": 212,
+      "feasible": false,
+      "objective": 0.7124183006535948,
+      "violation": 0.8181147916345923
+    },
+    {
+      "evaluations": 215,
+      "feasible": false,
+      "objective": 0.7549019607843137,
+      "violation": 0.7817599067599057
+    },
+    {
+      "evaluations": 216,
+      "feasible": false,
+      "objective": 0.7352941176470589,
+      "violation": 0.7748653017383
+    },
+    {
+      "evaluations": 229,
+      "feasible": false,
+      "objective": 0.7287581699346405,
+      "violation": 0.6611867763401039
+    },
+    {
+      "evaluations": 236,
+      "feasible": false,
+      "objective": 0.6928104575163399,
+      "violation": 0.559692299476515
+    },
+    {
+      "evaluations": 244,
+      "feasible": false,
+      "objective": 0.7091503267973857,
+      "violation": 0.5073448139223824
+    },
+    {
+      "evaluations": 264,
+      "feasible": false,
+      "objective": 0.7058823529411765,
+      "violation": 0.4548761424575937
+    },
+    {
+      "evaluations": 294,
+      "feasible": false,
+      "objective": 0.7156862745098039,
+      "violation": 0.44194902291706534
+    },
+    {
+      "evaluations": 297,
+      "feasible": false,
+      "objective": 0.7189542483660131,
+      "violation": 0.4265025362845663
+    },
+    {
+      "evaluations": 301,
+      "feasible": false,
+      "objective": 0.7647058823529411,
+      "violation": 0.42620435120435046
+    },
+    {
+      "evaluations": 309,
+      "feasible": false,
+      "objective": 0.7352941176470589,
+      "violation": 0.42620435120435046
+    },
+    {
+      "evaluations": 317,
+      "feasible": false,
+      "objective": 0.7320261437908496,
+      "violation": 0.42620435120435046
+    },
+    {
+      "evaluations": 318,
+      "feasible": false,
+      "objective": 0.7679738562091504,
+      "violation": 0.3845376845376841
+    },
+    {
+      "evaluations": 327,
+      "feasible": false,
+      "objective": 0.7516339869281046,
+      "violation": 0.3428710178710175
+    },
+    {
+      "evaluations": 350,
+      "feasible": false,
+      "objective": 0.7254901960784313,
+      "violation": 0.33150738150738135
+    },
+    {
+      "evaluations": 369,
+      "feasible": false,
+      "objective": 0.6895424836601307,
+      "violation": 0.33150738150738135
+    },
+    {
+      "evaluations": 375,
+      "feasible": false,
+      "objective": 0.6830065359477124,
+      "violation": 0.33150738150738135
+    },
+    {
+      "evaluations": 382,
+      "feasible": false,
+      "objective": 0.6928104575163399,
+      "violation": 0.28984071484071455
+    },
+    {
+      "evaluations": 385,
+      "feasible": false,
+      "objective": 0.6862745098039216,
+      "violation": 0.28984071484071455
+    },
+    {
+      "evaluations": 395,
+      "feasible": false,
+      "objective": 0.6633986928104575,
+      "violation": 0.28984071484071455
+    },
+    {
+      "evaluations": 401,
+      "feasible": false,
+      "objective": 0.6568627450980392,
+      "violation": 0.16484071484071527
+    },
+    {
+      "evaluations": 408,
+      "feasible": false,
+      "objective": 0.6535947712418301,
+      "violation": 0.16484071484071527
+    },
+    {
+      "evaluations": 416,
+      "feasible": false,
+      "objective": 0.6503267973856209,
+      "violation": 0.10073815073815143
+    },
+    {
+      "evaluations": 425,
+      "feasible": false,
+      "objective": 0.6143790849673203,
+      "violation": 0.10073815073815143
+    },
+    {
+      "evaluations": 449,
+      "feasible": false,
+      "objective": 0.6568627450980392,
+      "violation": 0.03962703962704076
+    },
+    {
+      "evaluations": 474,
+      "feasible": false,
+      "objective": 0.6372549019607843,
+      "violation": 0.03962703962704076
+    },
+    {
+      "evaluations": 476,
+      "feasible": false,
+      "objective": 0.6209150326797386,
+      "violation": 0.03962703962704076
+    },
+    {
+      "evaluations": 511,
+      "feasible": false,
+      "objective": 0.6176470588235294,
+      "violation": 0.03962703962704076
+    },
+    {
+      "evaluations": 531,
+      "feasible": false,
+      "objective": 0.6045751633986928,
+      "violation": 0.03962703962704076
+    },
+    {
+      "evaluations": 545,
+      "feasible": false,
+      "objective": 0.5947712418300654,
+      "violation": 0.03962703962704076
+    },
+    {
+      "evaluations": 546,
+      "feasible": false,
+      "objective": 0.5816993464052288,
+      "violation": 0.03962703962704076
+    },
+    {
+      "evaluations": 582,
+      "feasible": false,
+      "objective": 0.6274509803921569,
+      "violation": 0.032051282051283415
+    },
+    {
+      "evaluations": 586,
+      "feasible": false,
+      "objective": 0.6045751633986928,
+      "violation": 0.032051282051283415
+    },
+    {
+      "evaluations": 587,
+      "feasible": false,
+      "objective": 0.5751633986928104,
+      "violation": 0.032051282051283415
+    },
+    {
+      "evaluations": 588,
+      "feasible": false,
+      "objective": 0.6274509803921569,
+      "violation": 7.401486830834376e-16
+    },
+    {
+      "evaluations": 605,
+      "feasible": false,
+      "objective": 0.5915032679738562,
+      "violation": 7.401486830834376e-16
+    },
+    {
+      "evaluations": 639,
+      "feasible": false,
+      "objective": 0.5555555555555556,
+      "violation": 7.401486830834376e-16
+    },
+    {
+      "evaluations": 642,
+      "feasible": false,
+      "objective": 0.5065359477124183,
+      "violation": 7.401486830834376e-16
+    },
+    {
+      "evaluations": 656,
+      "feasible": false,
+      "objective": 0.5,
+      "violation": 7.401486830834376e-16
+    },
+    {
+      "evaluations": 805,
+      "feasible": true,
+      "objective": 0.5326797385620915,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 841,
+      "feasible": true,
+      "objective": 0.5261437908496732,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 852,
+      "feasible": true,
+      "objective": 0.5228758169934641,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 1142,
+      "feasible": true,
+      "objective": 0.49673202614379086,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 1225,
+      "feasible": true,
+      "objective": 0.4934640522875817,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 1439,
+      "feasible": true,
+      "objective": 0.49019607843137253,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 1475,
+      "feasible": true,
+      "objective": 0.47058823529411764,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 1643,
+      "feasible": true,
+      "objective": 0.46405228758169936,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 1797,
+      "feasible": true,
+      "objective": 0.4542483660130719,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 4642,
+      "feasible": true,
+      "objective": 0.4444444444444444,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 4779,
+      "feasible": true,
+      "objective": 0.43790849673202614,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 4822,
+      "feasible": true,
+      "objective": 0.42810457516339867,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 5103,
+      "feasible": true,
+      "objective": 0.41830065359477125,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 5276,
+      "feasible": true,
+      "objective": 0.40522875816993464,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 27539,
+      "feasible": true,
+      "objective": 0.4019607843137255,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 28319,
+      "feasible": true,
+      "objective": 0.39869281045751637,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 47187,
+      "feasible": true,
+      "objective": 0.39215686274509803,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 47515,
+      "feasible": true,
+      "objective": 0.38235294117647056,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 48697,
+      "feasible": true,
+      "objective": 0.3790849673202614,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 56385,
+      "feasible": true,
+      "objective": 0.37254901960784315,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 56528,
+      "feasible": true,
+      "objective": 0.369281045751634,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 56676,
+      "feasible": true,
+      "objective": 0.3627450980392157,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 57308,
+      "feasible": true,
+      "objective": 0.3562091503267974,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 60408,
+      "feasible": true,
+      "objective": 0.35294117647058826,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 60505,
+      "feasible": true,
+      "objective": 0.3464052287581699,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 60510,
+      "feasible": true,
+      "objective": 0.31699346405228757,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 60685,
+      "feasible": true,
+      "objective": 0.2973856209150327,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 60703,
+      "feasible": true,
+      "objective": 0.28431372549019607,
+      "violation": 0.0
+    },
+    {
+      "evaluations": 97922,
+      "feasible": true,
+      "objective": 0.2777777777777778,
+      "violation": 0.0
+    }
+  ],
+  "composition": {
+    "P1": [
+      "M5",
+      "M14",
+      "M14",
+      "M8",
+      "M8",
+      "M13",
+      "M10",
+      "M6",
+      "M2",
+      "M5"
+    ],
+    "P2": [
+      "M2",
+      "M11",
+      "M10",
+      "M13",
+      "M10",
+      "M10",
+      "M10",
+      "M9",
+      "M11",
+      "M12",
+      "M12"
+    ],
+    "P3": [
+      "M15",
+      "M10",
+      "M13",
+      "M2",
+      "M14",
+      "M2",
+      "M9",
+      "M14",
+      "M12",
+      "M12",
+      "M9",
+      "M9"
+    ],
+    "P4": [
+      "M9",
+      "M9",
+      "M12",
+      "M11",
+      "M10",
+      "M11",
+      "M10",
+      "M10",
+      "M12",
+      "M12",
+      "M9",
+      "M9",
+      "M8"
+    ],
+    "P5": [
+      "M8",
+      "M15",
+      "M13",
+      "M5",
+      "M15",
+      "M8",
+      "M2",
+      "M6",
+      "M12",
+      "M11",
+      "M11",
+      "M10",
+      "M8",
+      "M8"
+    ],
+    "P6": [
+      "M14",
+      "M20",
+      "M20",
+      "M1",
+      "M17",
+      "M16",
+      "M15",
+      "M13",
+      "M16",
+      "M19",
+      "M7",
+      "M16",
+      "M18",
+      "M7",
+      "M17"
+    ],
+    "P7": [
+      "M20",
+      "M15",
+      "M18",
+      "M15",
+      "M17",
+      "M19",
+      "M16",
+      "M16",
+      "M19",
+      "M16",
+      "M18",
+      "M18",
+      "M7",
+      "M17",
+      "M4",
+      "M2"
+    ],
+    "P8": [
+      "M20",
+      "M14",
+      "M17",
+      "M20",
+      "M19",
+      "M5",
+      "M13",
+      "M16",
+      "M5",
+      "M19",
+      "M18",
+      "M19",
+      "M5",
+      "M17",
+      "M6",
+      "M17",
+      "M18"
+    ],
+    "P9": [
+      "M20",
+      "M4",
+      "M17",
+      "M7",
+      "M6",
+      "M4",
+      "M15",
+      "M13",
+      "M5",
+      "M5",
+      "M4",
+      "M7",
+      "M7",
+      "M6",
+      "M6",
+      "M13",
+      "M2",
+      "M1"
+    ],
+    "P10": [
+      "M20",
+      "M20",
+      "M7",
+      "M17",
+      "M17",
+      "M13",
+      "M13",
+      "M16",
+      "M5",
+      "M5",
+      "M18",
+      "M18",
+      "M19",
+      "M19",
+      "M6",
+      "M15",
+      "M7",
+      "M2",
+      "M6"
+    ]
+  }
+}
