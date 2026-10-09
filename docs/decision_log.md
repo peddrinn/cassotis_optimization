@@ -310,3 +310,107 @@ P1 e P2 podem alterar o consumo global de minérios e, consequentemente, gerar v
 **Motivação:** separar desenvolvimento, calibração e execução final reduz seleção oportunista de configurações e permite reprodução exata dos experimentos.
 
 **Seeds anteriores não utilizadas como seeds finais:** seeds empregadas em testes automatizados, smoke tests e calibrações, incluindo 1–5, 1001–1003, 3001, 3101–3103 e 3201–3205.
+
+---
+
+## D018 — Normalização dos objetivos para a Entrega 2
+
+**Status:** CONFIRMADA
+
+**Decisão:** utilizar normalização min–max com referências fixas
+obtidas das melhores soluções factíveis mono-objetivo da Entrega 1:
+
+\[
+\hat f_j(X)=
+\frac{f_j(X)-z_j^*}{z_j^{ref}-z_j^*}.
+\]
+
+O vetor \(z^*\) contém o menor valor observado de cada objetivo
+nas três soluções-âncora. O vetor \(z^{ref}\) contém o maior valor
+observado de cada objetivo entre essas soluções.
+
+**Fonte dos dados:** `results/mono_final/summary.csv`,
+execuções `f1_seed2018`, `f2_seed2018` e `f3_seed2018`,
+versão de código `087e7e3`.
+
+**Alternativas consideradas:** divisão direta pelo ideal,
+normalização dinâmica durante a busca e escalonamento por limites
+físicos do problema.
+
+**Motivação:** reduzir a diferença de escala entre o custo em reais
+e os desvios quadráticos químicos, utilizando referências da Entrega 1
+conforme exigência do enunciado. As referências permanecem fixas,
+permitindo comparações consistentes entre as abordagens escalares.
+
+**Consequências:**
+- Não aplicar clipping em [0,1].
+- Admitir valores normalizados negativos ou superiores a 1.
+- Usar a precisão original dos resultados experimentais.
+- Não interpretar z* como ótimo global comprovado.
+- Não interpretar z_ref como nadir verdadeiro.
+- Validar que todo intervalo z_ref[j] - z*[j] seja positivo.
+
+**Implementação:** `data/referencias_multiobjetivo.json`,
+`multiobjective/multiobjective.py` e
+`multiobjective/normalizacao.py`.
+
+**Validação:** testes em `tests/test_normalizacao.py`.
+Promover a CONSOLIDADA após execução bem-sucedida dos testes.
+
+---
+
+## D019 — Escalarização por Soma Ponderada
+
+**Status:** CONFIRMADA
+
+**Decisão:** implementar a abordagem de Soma Ponderada como
+combinação linear dos três objetivos normalizados:
+
+\[
+F_w(X)=w_1\hat f_1(X)+w_2\hat f_2(X)+w_3\hat f_3(X).
+\]
+
+Os pesos satisfazem:
+
+\[
+w_j\geq 0,\qquad \sum_{j=1}^{3}w_j=1.
+\]
+
+A normalização segue as referências fixas definidas em D018.
+
+**Alternativas consideradas:** combinar os objetivos sem
+normalização; utilizar pesos que não somam 1; adaptar os pesos
+dinamicamente durante a busca.
+
+**Motivação:** a Soma Ponderada transforma os três objetivos
+conflitantes em um único critério escalar, permitindo reutilizar
+a GVNS desenvolvida na Entrega 1. A normalização evita que
+a diferença de unidades e magnitudes faça o custo dominar
+artificialmente os objetivos químicos.
+
+A restrição de soma unitária facilita a interpretação dos pesos
+e a comparação entre configurações.
+
+**Consequências:**
+
+- Cada vetor de pesos define um problema escalar diferente.
+- Pesos maiores representam maior prioridade relativa ao objetivo.
+- Pesos nulos são permitidos para explorar soluções extremas.
+- A abordagem pode não recuperar regiões não convexas da
+  fronteira de Pareto em espaços de objetivos discretos.
+- Soluções obtidas com pesos nulos podem ser apenas fracamente
+  eficientes; a filtragem de dominância será feita posteriormente.
+- As restrições originais do problema permanecem inalteradas.
+- A política de inviabilidade D007 será reutilizada quando
+  houver integração com a GVNS.
+- Os pesos serão fixos durante cada execução, não adaptativos.
+
+**Implementação:** `multiobjective/multiobjective.py`
+e `multiobjective/soma_ponderada.py`.
+
+**Validação:** `tests/test_soma_ponderada.py`.
+
+**Integração à GVNS:** PENDENTE.
+
+**Grade experimental de pesos:** será registrada em D021.
+A grade proposta ainda precisa ser validada.
