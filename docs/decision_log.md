@@ -414,3 +414,77 @@ e `multiobjective/soma_ponderada.py`.
 
 **Grade experimental de pesos:** será registrada em D021.
 A grade proposta ainda precisa ser validada.
+
+---
+
+## D020 — Escalarização pelo método epsilon-restrito
+
+**Status:** CONFIRMADA
+
+**Decisão:** implementar o método epsilon-restrito adotando o
+custo normalizado como objetivo principal e transformando os
+dois objetivos químicos normalizados em restrições adicionais:
+
+\[
+\min_X \hat f_1(X)
+\]
+
+sujeito às restrições originais e:
+
+\[
+\hat f_2(X)\leq\varepsilon_2,
+\qquad
+\hat f_3(X)\leq\varepsilon_3.
+\]
+
+A normalização utiliza as referências fixas definidas na D018.
+
+**Alternativas consideradas:** utilizar f2 ou f3 como objetivo
+principal; alternar o objetivo principal entre configurações;
+incorporar epsilon por penalização diretamente na função objetivo.
+
+**Motivação:** minimizar custo respeitando níveis máximos
+aceitáveis de desvio químico possui interpretação operacional
+direta para o problema de composição de pilhas.
+
+A formulação geral permite escolher qualquer objetivo principal,
+mas a configuração inicial do projeto adota f1.
+
+**Tratamento de inviabilidade:** estender a política D007 com
+violações adicionais:
+
+\[
+v_{\varepsilon_j}(X)=
+\max(0,\hat f_j(X)-\varepsilon_j).
+\]
+
+Para a comparação de soluções inviáveis, utilizar:
+
+\[
+V_\varepsilon(X)=
+V_{\mathrm{original}}(X)
++v_{\varepsilon_2}(X)
++v_{\varepsilon_3}(X).
+\]
+
+A factibilidade do problema escalar exige simultaneamente
+a factibilidade original e o atendimento aos limites epsilon.
+
+**Consequências:**
+
+- evaluation.feasible permanece associado ao problema original.
+- A factibilidade epsilon é verificada separadamente.
+- Os limites epsilon são expressos na escala normalizada.
+- Valores epsilon não são obrigatoriamente limitados a [0,1].
+- Configurações muito restritivas podem não produzir solução factível.
+- O tratamento de inviabilidade preserva o princípio D007.
+- A soma das violações normalizadas é uma escolha heurística,
+  não uma garantia de encontrar uma solução factível.
+- Os valores experimentais de epsilon serão definidos em D021.
+
+**Implementação:** `multiobjective/multiobjective.py`
+e `multiobjective/epsilon_restrito.py`.
+
+**Validação:** `tests/test_epsilon_restrito.py`.
+
+**Integração à GVNS:** PENDENTE.

@@ -42,3 +42,13 @@ class Weights:
             abs_tol=1e-12,
         ):
             raise ValueError("A soma dos pesos deve ser igual a 1.")
+
+
+@dataclass(frozen=True)
+class EpsilonLimits:
+    f2: float
+    f3: float
+
+    def __post_init__(self) -> None:
+        if not all(isfinite(v) for v in (self.f2, self.f3)):
+            raise ValueError("Os limites epsilon devem ser finitos.")
