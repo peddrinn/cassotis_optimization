@@ -525,3 +525,122 @@ em `algorithms/gvns.py`.
 
 **Validação da integração:** `tests/test_multiobjective_gvns.py`.
 
+---
+
+## D021 — Planejamento experimental multiobjetivo
+
+**Status:** PENDENTE
+
+**Decisão proposta:** comparar as abordagens Soma Ponderada e
+epsilon-restrito com 16 configurações escalares cada, utilizando
+cinco sementes por configuração na etapa oficial.
+
+### Soma Ponderada
+
+Gerar os pesos pela malha:
+
+\[
+w_j=k_j/4,\quad
+k_j\in\{0,1,2,3,4\},\quad
+\sum_j k_j=4.
+\]
+
+Acrescentar o vetor central (1/3, 1/3, 1/3), totalizando
+16 configurações.
+
+**Justificativa:** representar soluções extremas, compromissos
+entre dois objetivos e compromissos simultâneos entre três
+objetivos. O ponto central representa prioridades iguais.
+
+### Epsilon-restrito
+
+Manter f1 como objetivo principal e utilizar:
+
+\[
+\varepsilon_2,\varepsilon_3
+\in\{0.25,0.50,0.75,1.00\}.
+\]
+
+O produto cartesiano gera 16 configurações.
+
+**Justificativa:** explorar níveis progressivamente mais
+restritivos dos dois desvios químicos, na escala normalizada
+definida em D018.
+
+A viabilidade das configurações deverá ser investigada.
+A ausência de solução factível em uma execução não constitui
+prova de inexistência de solução factível.
+
+### Execução exploratória
+
+- Seeds: 4001 e 4002.
+- Orçamento: 50.000 avaliações por execução.
+- Mesmo conjunto de configurações proposto para a fase final.
+- Resultados armazenados separadamente dos resultados oficiais.
+
+Objetivos da exploração: validar a execução dos métodos,
+verificar obtenção de factibilidade e identificar eventuais
+problemas de cobertura do espaço de objetivos.
+
+A grade poderá ser revista nesta fase, desde que as alterações
+sejam justificadas e registradas antes das execuções oficiais.
+
+### Execução oficial proposta
+
+- Seeds: 2021, 2022, 2023, 2024 e 2025.
+- Orçamento: 200.000 avaliações por execução.
+- sample_size = 250.
+- SHAKE P1/P2/P3 = 3/4/5.
+- 16 configurações por abordagem.
+- 80 execuções e 16 milhões de avaliações por abordagem.
+
+As mesmas seeds serão utilizadas em todas as configurações.
+Os parâmetros serão congelados após a fase exploratória.
+
+O orçamento em avaliações será igual entre as abordagens,
+embora o tempo de execução possa variar.
+
+### Análise de resultados
+
+Reunir as melhores soluções finais de cada configuração e
+semente, preservando a identificação da execução que as gerou.
+
+Considerar apenas soluções factíveis para o respectivo problema
+escalar. Identificar a não dominância usando os três objetivos
+originais (f1, f2, f3), todos minimizados.
+
+A filtragem de dominância será feita em três dimensões, antes
+de construir as projeções bidimensionais:
+
+- f1 x f2;
+- f1 x f3;
+- f2 x f3.
+
+Os conjuntos não dominados serão produzidos separadamente
+para Soma Ponderada e epsilon-restrito.
+
+Soluções duplicadas poderão ser unificadas na visualização,
+sem perder o registro das seeds e configurações de origem.
+
+### Alternativas consideradas
+
+- Apenas 15 configurações de pesos;
+- grades de pesos e epsilon com tamanhos diferentes;
+- grades mais refinadas;
+- orçamentos diferentes entre abordagens;
+- utilização das seeds oficiais da Entrega 1.
+
+**Motivação:** produzir uma comparação controlada,
+reproduzível e com esforço experimental equivalente,
+sem selecionar configurações após observar os resultados finais.
+
+**Protocolo:** `data/protocolo_entrega2.json`.
+
+**Geração das grades:** `multiobjective/planejamento.py`.
+
+**Validação:** `tests/test_planejamento_multiobjetivo.py`.
+
+**Critério de consolidação:** concluir o piloto, documentar
+eventuais alterações, congelar o protocolo e somente então
+executar as cinco replicações oficiais.
+
