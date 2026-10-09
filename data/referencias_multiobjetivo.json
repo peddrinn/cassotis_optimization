@@ -1,30 +1,34 @@
+
 {
+  "instance": "data/example_instance",
+  "source": "results/mono_final/summary.csv",
+  "source_code_commit": "087e7e3",
   "anchor_solutions": [
     {
       "id": "X1",
-      "x": [59700000, 6.497711699, 6.537507381],
-      "f": [59700000, 6.497711699, 6.537507381],
-      "comment": "Otimiza f1 individualmente"
+      "run_id": "f1_seed2018",
+      "optimized_objective": "f1",
+      "f": [59700000.0, 6.497711698958577, 6.537507381189193]
     },
     {
       "id": "X2",
-      "x": [63440000, 2.373025427, 3.635610447],
-      "f": [63440000, 2.373025427, 3.635610447],
-      "comment": "Otimiza f2 individualmente"
+      "run_id": "f2_seed2018",
+      "optimized_objective": "f2",
+      "f": [63440000.0, 2.3730254273702003, 3.635610446744914]
     },
     {
       "id": "X3",
-      "x": [65820000, 6.339640659, 1.420762205],
-      "f": [65820000, 6.339640659, 1.420762205],
-      "comment": "Otimiza f3 individualmente"
+      "run_id": "f3_seed2018",
+      "optimized_objective": "f3",
+      "f": [65820000.0, 6.339640659482665, 1.4207622050785091]
     }
   ],
   "ideal_point": {
-    "z_star": [59700000, 2.373025427, 1.420762205],
-    "description": "Melhor valor de cada objetivo individualmente (ponto ideal/utópico)"
+    "z_star": [59700000.0, 2.3730254273702003, 1.4207622050785091],
+    "description": "Ideal estimado pelas melhores soluções mono-objetivo encontradas"
   },
   "nadir_reference": {
-    "z_ref": [65820000, 6.497711699, 6.537507381],
-    "description": "Pior valor de referência de cada objetivo entre as soluções-âncora (nadir de referência)"
+    "z_ref": [65820000.0, 6.497711698958577, 6.537507381189193],
+    "description": "Máximo por objetivo entre as três soluções-âncora; não é o nadir verdadeiro"
   }
 }
