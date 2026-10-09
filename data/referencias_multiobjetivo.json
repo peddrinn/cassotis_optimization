@@ -1,0 +1,30 @@
+{
+  "anchor_solutions": [
+    {
+      "id": "X1",
+      "x": [59700000, 6.497711699, 6.537507381],
+      "f": [59700000, 6.497711699, 6.537507381],
+      "comment": "Otimiza f1 individualmente"
+    },
+    {
+      "id": "X2",
+      "x": [63440000, 2.373025427, 3.635610447],
+      "f": [63440000, 2.373025427, 3.635610447],
+      "comment": "Otimiza f2 individualmente"
+    },
+    {
+      "id": "X3",
+      "x": [65820000, 6.339640659, 1.420762205],
+      "f": [65820000, 6.339640659, 1.420762205],
+      "comment": "Otimiza f3 individualmente"
+    }
+  ],
+  "ideal_point": {
+    "z_star": [59700000, 2.373025427, 1.420762205],
+    "description": "Melhor valor de cada objetivo individualmente (ponto ideal/utópico)"
+  },
+  "nadir_reference": {
+    "z_ref": [65820000, 6.497711699, 6.537507381],
+    "description": "Pior valor de referência de cada objetivo entre as soluções-âncora (nadir de referência)"
+  }
+}
